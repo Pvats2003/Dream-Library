@@ -53,29 +53,22 @@ function parseRange(r: unknown): [number, number] {
 
 export async function getStudentProfile(libraryId: string, id: string, canSeeHistory: boolean): Promise<StudentProfile | null> {
   const supabase = await createClient();
-  const { data: s, error } = await supabase
-    .from("students")
-    .select("*")
-    .eq("library_id", libraryId)
-    .eq("id", id)
-    .is("deleted_at", null)
-    .maybeSingle();
-  if (error) throw error;
-  if (!s) return null;
-
-  const [subs, invoices, deposits, attendance, activity, signed] = await Promise.all([
+  const [student, subs, invoices, deposits, attendance, activity] = await Promise.all([
+    supabase.from("students").select("*").eq("library_id", libraryId).eq("id", id).is("deleted_at", null).maybeSingle(),
     supabase
       .from("subscriptions")
       .select("id, start_date, end_date, status, price_paise, discount_paise, discount_reason, shift_minutes, subscription_pauses(to_date), plan:plans(name), shift:shifts(name), seat:seats(label)")
+      .eq("library_id", libraryId)
       .eq("student_id", id)
       .order("start_date", { ascending: false }),
     supabase
       .from("invoices")
       .select("id, due_date, period_start, period_end, amount_due_paise, amount_paid_paise, status, payments(id, amount_paise, method, received_at, receipt_number, receipt_token)")
+      .eq("library_id", libraryId)
       .eq("student_id", id)
       .order("due_date", { ascending: false }),
-    supabase.from("deposits").select("amount_paise, status, received_at").eq("student_id", id).order("received_at", { ascending: false }),
-    supabase.from("attendance").select("check_in_at, check_out_at").eq("student_id", id).order("check_in_at", { ascending: false }).limit(60),
+    supabase.from("deposits").select("amount_paise, status, received_at").eq("library_id", libraryId).eq("student_id", id).order("received_at", { ascending: false }),
+    supabase.from("attendance").select("check_in_at, check_out_at").eq("library_id", libraryId).eq("student_id", id).order("check_in_at", { ascending: false }).limit(60),
     canSeeHistory
       ? supabase
           .from("activity_log")
@@ -85,13 +78,16 @@ export async function getStudentProfile(libraryId: string, id: string, canSeeHis
           .order("created_at", { ascending: false })
           .limit(40)
       : Promise.resolve({ data: null, error: null }),
-    [s.photo_path, s.id_proof_path].some(Boolean)
-      ? supabase.storage
-          .from("student-files")
-          .createSignedUrls([s.photo_path, s.id_proof_path].filter((p): p is string => Boolean(p)), 3600)
-      : Promise.resolve({ data: [], error: null }),
   ]);
-  for (const r of [subs, invoices, deposits, attendance, activity]) if (r.error) throw r.error;
+  for (const r of [student, subs, invoices, deposits, attendance, activity]) if (r.error) throw r.error;
+  const s = student.data;
+  if (!s) return null;
+
+  // Photo links need the file paths, so they come after (and only if there are photos).
+  const paths = [s.photo_path, s.id_proof_path].filter((p): p is string => Boolean(p));
+  const signed = paths.length
+    ? await supabase.storage.from("student-files").createSignedUrls(paths, 3600)
+    : { data: [] as { path: string | null; signedUrl: string }[] };
 
   const urlFor = (path: string | null) => (path ? (signed.data?.find((x) => x.path === path)?.signedUrl ?? null) : null);
   const paused = subs.data!.find((p) => p.status === "paused");

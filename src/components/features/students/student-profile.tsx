@@ -1,12 +1,12 @@
 "use client";
 
-import { ArrowLeft, IdCard, Loader2, MessageCircle, Pause, Pencil, Phone, Play, RefreshCw, UserX } from "lucide-react";
-import Link from "next/link";
+import { IdCard, Loader2, MessageCircle, Pause, Pencil, Phone, Play, RefreshCw, UserX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { markLeft, pausePlan, resumePlan, saveNotes, updateStudent, type Result } from "@/actions/students";
 import { useAdmit } from "@/components/features/admit/admit-provider";
+import { BackLink } from "@/components/patterns/back-link";
 import { Avatar } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -77,10 +77,7 @@ export function StudentProfileView({
   return (
     <div className="pb-6">
       <div className="pt-4 lg:pt-8">
-        <Link href="/students" className="-ml-3 inline-flex h-12 items-center gap-1 rounded-[12px] px-3 text-base font-medium text-text-2 hover:bg-surface-2">
-          <ArrowLeft className="size-5" aria-hidden />
-          {t("back")}
-        </Link>
+        <BackLink href="/students">{t("back")}</BackLink>
       </div>
 
       {/* Header */}

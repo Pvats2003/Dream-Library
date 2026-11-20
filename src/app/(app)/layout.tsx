@@ -2,6 +2,7 @@ import {
   AdmitButton,
   AdmitProvider,
 } from "@/components/features/admit/admit-provider";
+import { NavTracker } from "@/components/patterns/back-link";
 import { OfflineBanner } from "@/components/shell/offline-banner";
 import { Toaster } from "@/components/ui/toast";
 import { Sidebar } from "@/components/shell/sidebar";
@@ -33,6 +34,7 @@ export default async function AppLayout({
         </div>
         <AdmitButton variant="fab" />
         <TabBar />
+      <NavTracker />
         <Toaster />
       </div>
     </AdmitProvider>

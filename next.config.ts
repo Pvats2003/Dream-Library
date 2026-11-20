@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   experimental: {
     optimizePackageImports: ["lucide-react", "motion"],
+    // Keep pages in the browser briefly so switching tabs and coming back is
+    // instant. Fully prefetched tabs stay fresh for 60 s, visited pages 30 s.
+    // Anything that changes data (admit, payment, seat move, live updates)
+    // clears this cache straight away.
+    staleTimes: { dynamic: 30, static: 60 },
   },
 };
 

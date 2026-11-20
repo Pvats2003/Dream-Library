@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { NAV_ITEMS } from "./nav-items";
@@ -9,6 +9,7 @@ import { NAV_ITEMS } from "./nav-items";
 /** Bottom tabs on phones: icon + word, like the apps the owner already uses. */
 export function TabBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations("nav");
   return (
     <nav
@@ -22,6 +23,8 @@ export function TabBar() {
             <li key={href}>
               <Link
                 href={href}
+                prefetch
+                onPointerDown={() => router.prefetch(href)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "flex h-full flex-col items-center justify-center gap-0.5 text-xs font-semibold",

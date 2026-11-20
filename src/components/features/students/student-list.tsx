@@ -2,6 +2,7 @@
 
 import { Search, Users } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useDeferredValue, useMemo, useState } from "react";
 import { EmptyState } from "@/components/patterns/empty-state";
@@ -32,6 +33,7 @@ export function StudentList({
   today: string;
 }) {
   const t = useTranslations("students");
+  const router = useRouter();
   const ts = useTranslations("seats");
   const locale = useLocale() as AppLocale;
   const [filter, setFilter] = useState<"current" | "left">("current");
@@ -94,6 +96,8 @@ export function StudentList({
               <li key={s.id}>
                 <Link
                   href={`/students/${s.id}`}
+                  onPointerDown={() => router.prefetch(`/students/${s.id}`)}
+                  onMouseEnter={() => router.prefetch(`/students/${s.id}`)}
                   className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2"
                 >
                   <Avatar name={s.name} src={s.photoUrl} />
