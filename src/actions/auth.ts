@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { DEFAULT_LOCALE, LOCALE_COOKIE, isLocale } from "@/i18n/config";
 import { otpSchema, phoneSchema } from "@/lib/schemas/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -29,9 +30,13 @@ export async function verifyCode(rawPhone: string, code: string): Promise<AuthRe
   if (error || !data.user) {
     return { ok: false, error: error?.status === 429 ? "tooMany" : "wrongCode" };
   }
-  // Keep the language they picked on the welcome screen.
+  // Remember the language they picked on the welcome screen — after the
+  // response, so it doesn't slow down the first screen.
   const chosen = (await cookies()).get(LOCALE_COOKIE)?.value;
-  await supabase.from("profiles").update({ locale: isLocale(chosen) ? chosen : DEFAULT_LOCALE }).eq("id", data.user.id);
+  const userId = data.user.id;
+  after(async () => {
+    await supabase.from("profiles").update({ locale: isLocale(chosen) ? chosen : DEFAULT_LOCALE }).eq("id", userId);
+  });
   redirect("/today");
 }
 
