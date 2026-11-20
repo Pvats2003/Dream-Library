@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, Users } from "lucide-react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useDeferredValue, useMemo, useState } from "react";
 import { EmptyState } from "@/components/patterns/empty-state";
@@ -20,9 +21,16 @@ export type StudentRow = {
   shiftName: string | null;
   endDate: string | null;
   owes: boolean;
+  photoUrl: string | null;
 };
 
-export function StudentList({ students, today }: { students: StudentRow[]; today: string }) {
+export function StudentList({
+  students,
+  today,
+}: {
+  students: StudentRow[];
+  today: string;
+}) {
   const t = useTranslations("students");
   const ts = useTranslations("seats");
   const locale = useLocale() as AppLocale;
@@ -33,7 +41,8 @@ export function StudentList({ students, today }: { students: StudentRow[]; today
   const shown = useMemo(() => {
     const digits = q.replace(/\D/g, "");
     return students.filter((s) => {
-      if (filter === "current" ? s.status === "left" : s.status !== "left") return false;
+      if (filter === "current" ? s.status === "left" : s.status !== "left")
+        return false;
       if (!q) return true;
       return (
         s.name.toLowerCase().includes(q) ||
@@ -48,7 +57,10 @@ export function StudentList({ students, today }: { students: StudentRow[]; today
   return (
     <div>
       <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-text-3" aria-hidden />
+        <Search
+          className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-text-3"
+          aria-hidden
+        />
         <input
           type="search"
           value={query}
@@ -70,38 +82,48 @@ export function StudentList({ students, today }: { students: StudentRow[]; today
       />
 
       {shown.length === 0 ? (
-        <EmptyState icon={Users} title={q ? t("noMatch", { query }) : t("empty")} />
+        <EmptyState
+          icon={Users}
+          title={q ? t("noMatch", { query }) : t("empty")}
+        />
       ) : (
         <ul className="mt-3 divide-y divide-border overflow-hidden rounded-[14px] border border-border bg-surface">
           {shown.map((s) => {
             const ended = s.endDate !== null && s.endDate < today;
             return (
-              <li key={s.id} className="flex items-center gap-3 px-4 py-3">
-                <Avatar name={s.name} />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-base font-semibold">{s.name}</p>
-                  <p className="truncate text-sm text-text-2">
-                    {s.seatLabel ? t("seat", { label: s.seatLabel }) : t("noSeat")}
-                    {s.shiftName ? ` · ${s.shiftName}` : ""}
-                  </p>
-                  <p className="truncate text-sm text-text-3 tabular">
-                    {s.endDate
-                      ? `${ended ? t("endedOn", { date: formatDay(s.endDate, locale) }) : t("endsOn", { date: formatDay(s.endDate, locale) })} · `
-                      : ""}
-                    {formatMobile(s.phone)}
-                  </p>
-                </div>
-                {s.status === "left" ? (
-                  <StatusPill status="left" label={t("statusLeft")} />
-                ) : s.owes ? (
-                  <StatusPill status="overdue" label={ts("overdue")} />
-                ) : s.status === "paused" ? (
-                  <StatusPill status="paused" label={t("statusPaused")} />
-                ) : s.endDate && !ended && s.endDate <= soon ? (
-                  <StatusPill status="expiring" label={ts("expiring")} />
-                ) : (
-                  <StatusPill status="paid" label={t("statusActive")} />
-                )}
+              <li key={s.id}>
+                <Link
+                  href={`/students/${s.id}`}
+                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2"
+                >
+                  <Avatar name={s.name} src={s.photoUrl} />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-base font-semibold">{s.name}</p>
+                    <p className="truncate text-sm text-text-2">
+                      {s.seatLabel
+                        ? t("seat", { label: s.seatLabel })
+                        : t("noSeat")}
+                      {s.shiftName ? ` · ${s.shiftName}` : ""}
+                    </p>
+                    <p className="truncate text-sm text-text-3 tabular">
+                      {s.endDate
+                        ? `${ended ? t("endedOn", { date: formatDay(s.endDate, locale) }) : t("endsOn", { date: formatDay(s.endDate, locale) })} · `
+                        : ""}
+                      {formatMobile(s.phone)}
+                    </p>
+                  </div>
+                  {s.status === "left" ? (
+                    <StatusPill status="left" label={t("statusLeft")} />
+                  ) : s.owes ? (
+                    <StatusPill status="overdue" label={ts("overdue")} />
+                  ) : s.status === "paused" ? (
+                    <StatusPill status="paused" label={t("statusPaused")} />
+                  ) : s.endDate && !ended && s.endDate <= soon ? (
+                    <StatusPill status="expiring" label={ts("expiring")} />
+                  ) : (
+                    <StatusPill status="paid" label={t("statusActive")} />
+                  )}
+                </Link>
               </li>
             );
           })}

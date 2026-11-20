@@ -28,7 +28,7 @@ import { formatMobile, normalizeIndianMobile, phoneDigits } from "@/lib/phone";
 import { isSeatFree, suggestSeats, type SeatInfo } from "@/lib/seats";
 import { fillTemplate } from "@/lib/templates";
 
-export type AdmitPrefill = { seatId?: string; shiftId?: string };
+export type AdmitPrefill = { seatId?: string; shiftId?: string; phone?: string };
 
 const EXAMS = ["BPSC", "SSC", "Railway", "Bank", "NEET", "JEE", "UPSC", "Police", "College"];
 type Step = "phone" | "details" | "plan" | "seat" | "pay" | "done";
@@ -113,12 +113,21 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
           if (p) setPlanId((cur) => cur ?? p.id);
         }
         if (prefill?.seatId) setSeatId((cur) => (cur === undefined ? prefill.seatId : cur));
+        if (prefill?.phone) {
+          const local = prefill.phone.replace(/^\+91/, "");
+          setDigits(local);
+          lookupStudent(prefill.phone).then((res) => {
+            if (cancelled || !res.ok) return;
+            setPhone(res.phone);
+            setExisting(res.existing);
+          });
+        }
       })
       .catch(() => !cancelled && setLoadError(true));
     return () => {
       cancelled = true;
     };
-  }, [open, prefill?.seatId, prefill?.shiftId]);
+  }, [open, prefill?.seatId, prefill?.shiftId, prefill?.phone]);
 
   const plan = data?.plans.find((p) => p.id === planId) ?? null;
   const shift = plan ? data?.shifts.find((s) => s.id === plan.shiftId) : undefined;

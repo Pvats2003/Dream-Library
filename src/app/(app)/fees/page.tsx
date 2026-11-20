@@ -1,5 +1,6 @@
 import { CircleCheck, Phone } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/patterns/empty-state";
 import { Money } from "@/components/patterns/money";
@@ -83,7 +84,9 @@ function FeeRow({
     <li className="flex items-center gap-3 px-4 py-3">
       <Avatar name={inv.studentName} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-base font-semibold">{inv.studentName}</p>
+        <Link href={`/students/${inv.studentId}`} className="block truncate text-base font-semibold hover:underline">
+          {inv.studentName}
+        </Link>
         <p className={cn("text-sm", late > 0 ? "font-medium text-danger" : "font-medium text-warning")}>
           {late > 0 ? t("pendingSince", { days: late }) : t("dueIn", { days: -late })}
         </p>

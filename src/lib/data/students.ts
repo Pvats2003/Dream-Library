@@ -11,6 +11,7 @@ export type StudentListItem = {
   shiftName: string | null;
   endDate: string | null;
   owes: boolean;
+  photoUrl: string | null;
 };
 
 export async function getStudentList(libraryId: string, today: string): Promise<StudentListItem[]> {
@@ -18,7 +19,7 @@ export async function getStudentList(libraryId: string, today: string): Promise<
   const [students, subs, dues] = await Promise.all([
     supabase
       .from("students")
-      .select("id, name, phone, status, exam_target")
+      .select("id, name, phone, status, exam_target, photo_path")
       .eq("library_id", libraryId)
       .is("deleted_at", null)
       .order("name"),
@@ -41,6 +42,9 @@ export async function getStudentList(libraryId: string, today: string): Promise<
   const latest = new Map<string, NonNullable<typeof subs.data>[number]>();
   for (const s of subs.data!) if (!latest.has(s.student_id)) latest.set(s.student_id, s);
   const owing = new Set(dues.data!.map((d) => d.student_id));
+  const paths = students.data!.map((s) => s.photo_path).filter((p): p is string => Boolean(p));
+  const signed = paths.length ? (await supabase.storage.from("student-files").createSignedUrls(paths, 3600)).data ?? [] : [];
+  const urlFor = (p: string | null) => (p ? (signed.find((x) => x.path === p)?.signedUrl ?? null) : null);
 
   return students.data!.map((s) => {
     const sub = latest.get(s.id);
@@ -54,6 +58,7 @@ export async function getStudentList(libraryId: string, today: string): Promise<
       shiftName: sub?.shift?.name ?? null,
       endDate: sub?.end_date ?? null,
       owes: owing.has(s.id),
+      photoUrl: urlFor(s.photo_path),
     };
   });
 }
