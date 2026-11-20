@@ -451,14 +451,14 @@ isOneToOne: false
                   ]
                 },"subscriptions": {
                   Row: {
-                    "active_dates": unknown,"auto_renew": boolean,"billing_day": number,"cancelled_at": string | null,"created_at": string,"created_by": string | null,"discount_paise": number,"discount_reason": string | null,"end_date": string,"id": string,"library_id": string,"plan_id": string,"price_paise": number,"renewed_from_id": string | null,"seat_id": string | null,"shift_id": string,"shift_minutes": unknown,"start_date": string,"status": Database["public"]['Enums']["subscription_status"],"student_id": string,"updated_at": string
+                    "active_dates": unknown,"auto_renew": boolean,"billing_day": number,"cancelled_at": string | null,"client_op_id": string | null,"created_at": string,"created_by": string | null,"discount_paise": number,"discount_reason": string | null,"end_date": string,"id": string,"library_id": string,"plan_id": string,"price_paise": number,"renewed_from_id": string | null,"seat_id": string | null,"shift_id": string,"shift_minutes": unknown,"start_date": string,"status": Database["public"]['Enums']["subscription_status"],"student_id": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "active_dates"?: never,"auto_renew"?: boolean,"billing_day": number,"cancelled_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"discount_paise"?: number,"discount_reason"?: string | null,"end_date": string,"id"?: string,"library_id": string,"plan_id": string,"price_paise": number,"renewed_from_id"?: string | null,"seat_id"?: string | null,"shift_id": string,"shift_minutes": unknown,"start_date": string,"status"?: Database["public"]['Enums']["subscription_status"],"student_id": string,"updated_at"?: string
+                    "active_dates"?: never,"auto_renew"?: boolean,"billing_day": number,"cancelled_at"?: string | null,"client_op_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"discount_paise"?: number,"discount_reason"?: string | null,"end_date": string,"id"?: string,"library_id": string,"plan_id": string,"price_paise": number,"renewed_from_id"?: string | null,"seat_id"?: string | null,"shift_id": string,"shift_minutes": unknown,"start_date": string,"status"?: Database["public"]['Enums']["subscription_status"],"student_id": string,"updated_at"?: string
                   }
                   Update: {
-                    "active_dates"?: never,"auto_renew"?: boolean,"billing_day"?: number,"cancelled_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"discount_paise"?: number,"discount_reason"?: string | null,"end_date"?: string,"id"?: string,"library_id"?: string,"plan_id"?: string,"price_paise"?: number,"renewed_from_id"?: string | null,"seat_id"?: string | null,"shift_id"?: string,"shift_minutes"?: unknown,"start_date"?: string,"status"?: Database["public"]['Enums']["subscription_status"],"student_id"?: string,"updated_at"?: string
+                    "active_dates"?: never,"auto_renew"?: boolean,"billing_day"?: number,"cancelled_at"?: string | null,"client_op_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"discount_paise"?: number,"discount_reason"?: string | null,"end_date"?: string,"id"?: string,"library_id"?: string,"plan_id"?: string,"price_paise"?: number,"renewed_from_id"?: string | null,"seat_id"?: string | null,"shift_id"?: string,"shift_minutes"?: unknown,"start_date"?: string,"status"?: Database["public"]['Enums']["subscription_status"],"student_id"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -557,13 +557,40 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "my_memberships":
+            "admit_student":
+{ Args: { "input": Json }; Returns: Json
+                           },
+"create_library":
+{ Args: { "lib_city": string,"lib_name": string,"owner_name": string }; Returns: string
+                           },
+"mark_left":
+{ Args: { "deposit_action": string,"note": string,"stu": string }; Returns: undefined
+                           },
+"move_seat":
+{ Args: { "new_seat": string,"sub": string }; Returns: undefined
+                           },
+"my_memberships":
 { Args: Record<PropertyKey, never>; Returns: {
               "library_id": string,"library_name": string,"library_slug": string,"membership_id": string,"permissions": Json,"role": Database["public"]['Enums']["member_role"],"setup_completed": boolean
             }[]
                            },
+"pause_subscription":
+{ Args: { "days": number,"reason": string,"sub": string }; Returns: Json
+                           },
+"renew_subscription":
+{ Args: { "input": Json }; Returns: Json
+                           },
+"resume_subscription":
+{ Args: { "sub": string }; Returns: Json
+                           },
+"save_layout":
+{ Args: { "layout": Json,"lib": string }; Returns: undefined
+                           },
 "today_summary":
 { Args: { "lib": string,"on_date": string }; Returns: Json
+                           },
+"vacate_seat":
+{ Args: { "sub": string }; Returns: undefined
                            }
           }
           Enums: {

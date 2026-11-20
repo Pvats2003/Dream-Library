@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 import { NAV_ITEMS } from "./nav-items";
 
 /** Left sidebar on desktop. */
-export function Sidebar({ libraryName, city }: { libraryName: string; city: string | null }) {
+export function Sidebar({ libraryName, city, action }: { libraryName: string; city: string | null; action?: React.ReactNode }) {
   const pathname = usePathname();
   const t = useTranslations("nav");
   return (
@@ -20,6 +20,7 @@ export function Sidebar({ libraryName, city }: { libraryName: string; city: stri
           {city ? <p className="truncate text-xs text-text-3">{city}</p> : null}
         </div>
       </div>
+      {action ? <div className="mb-4 px-1">{action}</div> : null}
       <nav aria-label="Main">
         <ul className="flex flex-col gap-1">
           {NAV_ITEMS.map(({ href, key, Icon }) => {
