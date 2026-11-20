@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { createContext, use, useCallback, useState, type ReactNode } from "react";
+import { createContext, use, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import type { AdmitPrefill } from "./admit-flow";
 
@@ -49,6 +49,29 @@ export function AdmitButton({ variant }: { variant: "fab" | "sidebar" }) {
           ? "fixed right-4 bottom-[calc(76px+env(safe-area-inset-bottom))] z-40 h-14 rounded-[18px] px-5 text-base shadow-[var(--shadow-pop)] lg:hidden"
           : "h-12 w-full rounded-[12px] text-base",
       )}
+    >
+      <Plus className="size-5" strokeWidth={2.6} aria-hidden />
+      {t("open")}
+    </button>
+  );
+}
+
+/** Desktop page-header button; can open the sheet straight away (?add=1). */
+export function AdmitHeaderButton({ autoOpen }: { autoOpen?: boolean }) {
+  const t = useTranslations("admit");
+  const openAdmit = useAdmit();
+  const done = useRef(false);
+  useEffect(() => {
+    if (autoOpen && !done.current) {
+      done.current = true;
+      openAdmit();
+    }
+  }, [autoOpen, openAdmit]);
+  return (
+    <button
+      type="button"
+      onClick={() => openAdmit()}
+      className="hidden h-12 items-center gap-2 rounded-[12px] bg-brand px-4 text-base font-semibold text-brand-fg hover:bg-brand-hover lg:flex"
     >
       <Plus className="size-5" strokeWidth={2.6} aria-hidden />
       {t("open")}

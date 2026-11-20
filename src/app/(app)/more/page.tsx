@@ -1,4 +1,5 @@
-import { LogOut, MessageCircle } from "lucide-react";
+import { ChevronRight, LogOut, MessageCircle, Settings } from "lucide-react";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
@@ -20,8 +21,9 @@ const ROLE_KEY = { owner: "roleOwner", manager: "roleManager", desk: "roleDesk" 
 export default async function MorePage() {
   const { viewer, membership } = await requireLibrary();
   const library = { name: membership.libraryName, city: membership.city };
-  const [t, themeCookie] = await Promise.all([
+  const [t, ts, themeCookie] = await Promise.all([
     getTranslations("more"),
+    getTranslations("setup"),
     cookies().then((c) => c.get(THEME_COOKIE)?.value),
   ]);
   const help = SUPPORT_WHATSAPP
@@ -50,6 +52,22 @@ export default async function MorePage() {
             options={viewer.memberships.map((m) => ({ id: m.libraryId, name: m.libraryName }))}
           />
         </Section>
+      ) : null}
+
+      {membership.permissions.can_edit_settings ? (
+        <Link
+          href="/setup/seats"
+          className="flex min-h-16 items-center gap-3 rounded-[14px] border border-border bg-surface px-4 py-3 transition-colors hover:bg-surface-2"
+        >
+          <span className="grid size-10 place-items-center rounded-full bg-brand-soft text-brand-soft-fg">
+            <Settings className="size-5" aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-base font-semibold">{ts("settingsLink")}</span>
+            <span className="block text-sm text-text-2">{ts("settingsHint")}</span>
+          </span>
+          <ChevronRight className="size-5 text-text-3" aria-hidden />
+        </Link>
       ) : null}
 
       <Section title={t("language")}>

@@ -543,6 +543,13 @@ end;
 $$;
 
 -- ---------------------------------------------------------------------------
+-- Staff invites: linking a new staff member to an existing login reads
+-- auth.users, which owners can't see directly. Run that one lookup with
+-- raised rights (it only ever matches on the exact phone being added).
+-- ---------------------------------------------------------------------------
+alter function private.membership_defaults() security definer;
+
+-- ---------------------------------------------------------------------------
 -- Grants
 -- ---------------------------------------------------------------------------
 revoke all on all functions in schema private from public, anon;

@@ -1,7 +1,7 @@
 -- Admit, renew, move, pause, mark as left, receipts and library setup.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(29);
+select plan(30);
 
 insert into auth.users (id, phone, aud, role) values
   ('00000000-0000-0000-0000-0000000000a1', '918100000001', 'authenticated', 'authenticated'), -- owner
@@ -141,6 +141,12 @@ select is((select role::text from public.memberships where library_id = (select 
 select public.save_layout((select id from nl), '[{"name": "Hall", "seats": [{"label": "A1", "x": 0, "y": 0}, {"label": "A2", "x": 1, "y": 0}]}]'::jsonb);
 select is((select count(*)::int from public.seats where library_id = (select id from nl)), 2, 'layout saved');
 select is((select count(*)::int from public.students), 0, 'the new owner sees no one else''s students');
+
+-- The new owner adds desk staff by phone (needs the auth.users lookup to work).
+select lives_ok($$
+  insert into public.memberships (library_id, phone, display_name, role, permissions)
+  values ((select id from nl), '+918100000077', 'Sonu', 'desk', '{"can_see_earnings": false}')
+$$, 'an owner can add staff by mobile number');
 
 select * from finish();
 rollback;

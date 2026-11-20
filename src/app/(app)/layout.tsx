@@ -6,6 +6,7 @@ import { OfflineBanner } from "@/components/shell/offline-banner";
 import { Toaster } from "@/components/ui/toast";
 import { Sidebar } from "@/components/shell/sidebar";
 import { TabBar } from "@/components/shell/tab-bar";
+import { redirect } from "next/navigation";
 import { requireLibrary } from "@/lib/session";
 
 export default async function AppLayout({
@@ -14,6 +15,7 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const { membership } = await requireLibrary();
+  if (!membership.setupCompleted && membership.permissions.can_edit_settings) redirect("/setup/seats");
 
   return (
     <AdmitProvider>
