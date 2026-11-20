@@ -56,25 +56,18 @@ export function AdmitButton({ variant }: { variant: "fab" | "sidebar" }) {
   );
 }
 
-/** Desktop page-header button; can open the sheet straight away (?add=1). */
-export function AdmitHeaderButton({ autoOpen }: { autoOpen?: boolean }) {
-  const t = useTranslations("admit");
+/**
+ * Opens the admit sheet straight away when arriving with ?add=1 (from the
+ * end of setup). The visible buttons are the floating one and the sidebar's.
+ */
+export function AdmitAutoOpen({ when }: { when: boolean }) {
   const openAdmit = useAdmit();
   const done = useRef(false);
   useEffect(() => {
-    if (autoOpen && !done.current) {
+    if (when && !done.current) {
       done.current = true;
       openAdmit();
     }
-  }, [autoOpen, openAdmit]);
-  return (
-    <button
-      type="button"
-      onClick={() => openAdmit()}
-      className="hidden h-12 items-center gap-2 rounded-[12px] bg-brand px-4 text-base font-semibold text-brand-fg hover:bg-brand-hover lg:flex"
-    >
-      <Plus className="size-5" strokeWidth={2.6} aria-hidden />
-      {t("open")}
-    </button>
-  );
+  }, [when, openAdmit]);
+  return null;
 }
