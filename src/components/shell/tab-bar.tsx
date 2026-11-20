@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -30,13 +29,13 @@ export function TabBar() {
                 )}
               >
                 <span className="relative grid h-8 w-14 place-items-center">
-                  {active ? (
-                    <motion.span
-                      layoutId="tab-pill"
-                      className="absolute inset-0 rounded-full bg-brand-soft"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  ) : null}
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "absolute inset-0 rounded-full bg-brand-soft transition-[opacity,transform] duration-200 ease-out",
+                      active ? "scale-100 opacity-100" : "scale-75 opacity-0",
+                    )}
+                  />
                   <Icon className="relative size-[22px]" strokeWidth={active ? 2.4 : 2} aria-hidden />
                 </span>
                 {t(key)}

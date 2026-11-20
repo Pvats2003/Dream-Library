@@ -20,6 +20,8 @@ export type Membership = {
   libraryId: string;
   libraryName: string;
   librarySlug: string;
+  city: string | null;
+  timezone: string;
   role: Role;
   permissions: Permissions;
   setupCompleted: boolean;
@@ -27,15 +29,24 @@ export type Membership = {
 export type Viewer = {
   userId: string;
   phone: string | null;
-  fullName: string | null;
-  isPlatformAdmin: boolean;
   memberships: Membership[];
 };
 
+const OWNER_PERMISSIONS: Permissions = {
+  can_see_earnings: true,
+  can_discount: true,
+  can_delete: true,
+  can_edit_settings: true,
+  can_manage_staff: true,
+};
+
 /**
- * The logged-in person and the libraries they work in. Deduplicated per
- * request. Identity comes from a verified JWT (getClaims), never from an
- * unverified cookie.
+ * The logged-in person and the libraries they work in, in ONE database
+ * round trip (memberships with their library embedded). Deduplicated per
+ * request. Identity comes from a verified JWT (getClaims verifies the ES256
+ * signature locally, no network call), never from an unverified cookie.
+ * The database enforces every permission again via RLS; these flags only
+ * shape the UI.
  */
 export const getViewer = cache(async (): Promise<Viewer | null> => {
   const supabase = await createClient();
@@ -43,24 +54,27 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
   const sub = data?.claims?.sub;
   if (!sub) return null;
 
-  const [{ data: profile }, { data: rows }] = await Promise.all([
-    supabase.from("profiles").select("full_name, phone, is_platform_admin").eq("id", sub).maybeSingle(),
-    supabase.rpc("my_memberships"),
-  ]);
+  const { data: rows } = await supabase
+    .from("memberships")
+    .select("id, role, permissions, library:libraries!inner(id, name, slug, city, timezone, setup_completed_at)")
+    .eq("user_id", sub)
+    .eq("is_active", true)
+    .order("created_at");
 
+  const phone = data.claims.phone ? `+${String(data.claims.phone).replace(/^\+/, "")}` : null;
   return {
     userId: sub,
-    phone: profile?.phone ?? (data.claims.phone ? `+${String(data.claims.phone).replace(/^\+/, "")}` : null),
-    fullName: profile?.full_name ?? null,
-    isPlatformAdmin: profile?.is_platform_admin ?? false,
+    phone,
     memberships: (rows ?? []).map((r) => ({
-      membershipId: r.membership_id,
-      libraryId: r.library_id,
-      libraryName: r.library_name,
-      librarySlug: r.library_slug,
+      membershipId: r.id,
+      libraryId: r.library.id,
+      libraryName: r.library.name,
+      librarySlug: r.library.slug,
+      city: r.library.city,
+      timezone: r.library.timezone,
       role: r.role,
-      permissions: r.permissions as unknown as Permissions,
-      setupCompleted: r.setup_completed,
+      permissions: r.role === "owner" ? OWNER_PERMISSIONS : (r.permissions as unknown as Permissions),
+      setupCompleted: r.library.setup_completed_at !== null,
     })),
   };
 });

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Noto_Sans_Devanagari } from "next/font/google";
+import { Geist } from "next/font/google";
 import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
@@ -7,11 +7,6 @@ import { THEME_COOKIE, isThemePref } from "@/lib/theme";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
-const devanagari = Noto_Sans_Devanagari({
-  variable: "--font-devanagari",
-  subsets: ["devanagari"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: { default: "LibraryOS", template: "%s · LibraryOS" },
@@ -37,7 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const explicitTheme = isThemePref(theme) && theme !== "system" ? theme : undefined;
 
   return (
-    <html lang={locale} data-theme={explicitTheme} className={`${geist.variable} ${devanagari.variable}`}>
+    <html lang={locale} data-theme={explicitTheme} className={geist.variable}>
       <body className="min-h-dvh">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

@@ -9,7 +9,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { daysBetween, formatDay, type AppLocale } from "@/lib/dates";
 import { getOpenInvoices, type OpenInvoice } from "@/lib/data/fees";
-import { libraryToday } from "@/lib/data/library";
+import { todayInTz } from "@/lib/dates";
 import { formatINR } from "@/lib/money";
 import { requireLibrary } from "@/lib/session";
 
@@ -17,7 +17,7 @@ export const metadata: Metadata = { title: "Fees" };
 
 export default async function FeesPage() {
   const { membership } = await requireLibrary();
-  const today = await libraryToday(membership.libraryId);
+  const today = todayInTz(membership.timezone);
   const [invoices, t, locale] = await Promise.all([
     getOpenInvoices(membership.libraryId, today),
     getTranslations("fees"),

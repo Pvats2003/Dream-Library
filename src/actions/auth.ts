@@ -32,7 +32,7 @@ export async function verifyCode(rawPhone: string, code: string): Promise<AuthRe
   // Keep the language they picked on the welcome screen.
   const chosen = (await cookies()).get(LOCALE_COOKIE)?.value;
   await supabase.from("profiles").update({ locale: isLocale(chosen) ? chosen : DEFAULT_LOCALE }).eq("id", data.user.id);
-  redirect("/");
+  redirect("/today");
 }
 
 export async function signOut(): Promise<void> {

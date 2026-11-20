@@ -8,7 +8,6 @@ import { LanguageSwitch, LibrarySwitch, ThemeSwitch } from "@/components/feature
 import { PageHeader } from "@/components/patterns/page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getLibrary } from "@/lib/data/library";
 import { SUPPORT_WHATSAPP } from "@/lib/env";
 import { formatMobile } from "@/lib/phone";
 import { requireLibrary } from "@/lib/session";
@@ -20,8 +19,8 @@ const ROLE_KEY = { owner: "roleOwner", manager: "roleManager", desk: "roleDesk" 
 
 export default async function MorePage() {
   const { viewer, membership } = await requireLibrary();
-  const [library, t, themeCookie] = await Promise.all([
-    getLibrary(membership.libraryId),
+  const library = { name: membership.libraryName, city: membership.city };
+  const [t, themeCookie] = await Promise.all([
     getTranslations("more"),
     cookies().then((c) => c.get(THEME_COOKIE)?.value),
   ]);

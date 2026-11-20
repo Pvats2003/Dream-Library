@@ -136,7 +136,9 @@
   --color-info-soft: var(--info-soft);
   --color-focus: var(--focus);
 
-  --font-sans: var(--font-geist), var(--font-devanagari), ui-sans-serif, system-ui, sans-serif;
+  /* Hindi uses the font already on the device (Android ships Noto Sans
+     Devanagari; iOS Kohinoor; Windows Nirmala UI) — no 120 KB download. */
+  --font-sans: var(--font-geist), "Noto Sans Devanagari", "Kohinoor Devanagari", "Nirmala UI", "Mangal", ui-sans-serif, system-ui, sans-serif;
 
   /* Type scale: 13 / 15 / 17 / 20 / 24 / 32 / 40. Body is 17. */
   --text-xs: 13px;

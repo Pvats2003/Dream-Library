@@ -4,7 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { SeatMap } from "@/components/features/seats/seat-map";
 import { EmptyState } from "@/components/patterns/empty-state";
 import { PageHeader } from "@/components/patterns/page-header";
-import { getShifts, libraryToday } from "@/lib/data/library";
+import { getShifts } from "@/lib/data/library";
+import { todayInTz } from "@/lib/dates";
 import { getSeatBoard } from "@/lib/data/seats";
 import { requireLibrary } from "@/lib/session";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = { title: "Seats" };
 
 export default async function SeatsPage() {
   const { membership } = await requireLibrary();
-  const today = await libraryToday(membership.libraryId);
+  const today = todayInTz(membership.timezone);
   const [zones, shifts, t] = await Promise.all([
     getSeatBoard(membership.libraryId, today),
     getShifts(membership.libraryId),

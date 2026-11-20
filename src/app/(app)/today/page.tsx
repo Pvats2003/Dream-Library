@@ -6,8 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Money } from "@/components/patterns/money";
 import { ShiftRing } from "@/components/patterns/shift-ring";
 import { cn } from "@/lib/cn";
-import { formatMinutesShort, type AppLocale } from "@/lib/dates";
-import { getLibrary, getShifts, libraryToday } from "@/lib/data/library";
+import { formatMinutesShort, todayInTz, type AppLocale } from "@/lib/dates";
+import { getShifts } from "@/lib/data/library";
 import { getTodaySummary } from "@/lib/data/today";
 import { requireLibrary } from "@/lib/session";
 
@@ -22,9 +22,9 @@ function greetingKey(tz: string): "greetingMorning" | "greetingDay" | "greetingE
 
 export default async function TodayPage() {
   const { membership } = await requireLibrary();
-  const [library, today, t, locale, tSeats] = await Promise.all([
-    getLibrary(membership.libraryId),
-    libraryToday(membership.libraryId),
+  const library = { name: membership.libraryName, timezone: membership.timezone };
+  const today = todayInTz(membership.timezone);
+  const [t, locale, tSeats] = await Promise.all([
     getTranslations("today"),
     getLocale(),
     getTranslations("seats"),

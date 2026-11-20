@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
-import { useId } from "react";
 import { cn } from "@/lib/cn";
 
 export function Segmented<T extends string>({
@@ -17,7 +15,6 @@ export function Segmented<T extends string>({
   label: string;
   className?: string;
 }) {
-  const id = useId();
   return (
     <div role="radiogroup" aria-label={label} className={cn("flex gap-1 overflow-x-auto rounded-[14px] bg-surface-2 p-1", className)}>
       {options.map((o) => {
@@ -34,13 +31,13 @@ export function Segmented<T extends string>({
               active ? "text-text" : "text-text-2 hover:text-text",
             )}
           >
-            {active ? (
-              <motion.span
-                layoutId={`seg-${id}`}
-                className="absolute inset-0 rounded-[10px] border border-border bg-surface shadow-sm"
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
-            ) : null}
+            <span
+              aria-hidden
+              className={cn(
+                "absolute inset-0 rounded-[10px] border border-border bg-surface shadow-sm transition-opacity duration-150",
+                active ? "opacity-100" : "opacity-0",
+              )}
+            />
             <span className="relative">{o.label}</span>
           </button>
         );
