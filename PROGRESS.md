@@ -39,9 +39,15 @@
 | Student and fee rows cut off the end date | Details split across two short lines |
 | "Good evening" shown after midnight | Late night now just says "नमस्ते" |
 
+### Live
+- App: https://libraryos-theta.vercel.app (Vercel, server in Mumbai)
+- Database: Supabase project `enqmocctaonzgkszpbnl` (Mumbai, Postgres 17). All 3 migrations applied, sample data loaded, and the 24 security tests pass against it.
+- Verified on the live site: owner and desk OTP login, every tab at phone and desktop widths, desk sees no ₹ totals, no console errors.
+- Test logins on the live site: 99999 00001 / 00002 / 00003 with code 123456 (valid until 30 Dec 2027; **remove before real data goes in**).
+
 ### Known gaps (deliberately not built yet)
 - Tapping a seat, student or fee row does nothing yet. Seat sheet, student profile and admit come in **phase 2**; recording payments and WhatsApp reminders in **phase 3**. The floating **+** button is hidden until those exist.
 - Shift and plan names ("Morning", "Full Day") are the owner's own data, so they appear as typed. He can rename them in Hindi from the setup wizard (phase 2).
 - The Help button in More is hidden until `NEXT_PUBLIC_SUPPORT_WHATSAPP` (Priyanshu's number) is set.
 - The app isn't installable (PWA) yet; that's phase 6.
-- Real SMS: local and test logins use fixed test numbers. Before real use we connect MSG91 or Twilio with DLT registration (see PLAN.md §2.2).
+- Real SMS: local and test logins use fixed test numbers. Any other number gets "कोड नहीं भेज पाए" because the SMS provider is a placeholder. Before real use we connect MSG91 or Twilio with DLT registration (see PLAN.md §2.2).
