@@ -272,7 +272,7 @@ enable_confirmations = false
 # Template for sending OTP to users
 template = "{{ .Code }} aapka LibraryOS login code hai. Kisi ko na batayein."
 # Controls the minimum amount of time that must pass before sending another sms otp.
-max_frequency = "5s"
+max_frequency = "1s"
 
 # Use pre-defined map of phone number to OTP for testing.
 # Keys are the phone number with country code and without the + prefix.
@@ -326,7 +326,7 @@ enroll_enabled = false
 verify_enabled = false
 otp_length = 6
 template = "{{ .Code }} aapka LibraryOS login code hai. Kisi ko na batayein."
-max_frequency = "5s"
+max_frequency = "1s"
 
 # Configure MFA via WebAuthn
 # [auth.mfa.web_authn]

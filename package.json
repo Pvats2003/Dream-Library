@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:db": "supabase test db",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test --trace off"
+    "test:e2e": "playwright test --trace off",
+    "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",

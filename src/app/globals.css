@@ -1,26 +1,236 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Design tokens: "calm, precise, warm".
+ * Neutrals are slightly warm; one brand accent (deep indigo, overridable per
+ * library via --brand on <body>). Semantic colours always ship with an icon
+ * or word in the UI — never colour alone.
+ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Dark when chosen explicitly, or when the phone is dark and they didn't pick light. */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  color-scheme: light;
+  --bg: oklch(0.982 0.004 85);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.965 0.005 85);
+  --surface-3: oklch(0.935 0.006 85);
+  --border: oklch(0.905 0.006 85);
+  --border-strong: oklch(0.82 0.008 85);
+  --text: oklch(0.21 0.012 275);
+  --text-2: oklch(0.44 0.012 275);
+  --text-3: oklch(0.54 0.01 275);
+
+  --brand: oklch(0.45 0.165 272);
+  --brand-hover: oklch(0.4 0.165 272);
+  --brand-fg: oklch(0.99 0 0);
+  --brand-soft: oklch(0.95 0.03 272);
+  --brand-soft-fg: oklch(0.38 0.15 272);
+
+  --success: oklch(0.5 0.13 152);
+  --success-soft: oklch(0.95 0.045 152);
+  --warning: oklch(0.52 0.12 62);
+  --warning-soft: oklch(0.96 0.055 85);
+  --danger: oklch(0.52 0.19 27);
+  --danger-soft: oklch(0.955 0.03 27);
+  --info: oklch(0.5 0.13 245);
+  --info-soft: oklch(0.955 0.03 245);
+
+  --focus: oklch(0.55 0.2 272);
+  --shadow-sheet: 0 -8px 32px oklch(0.2 0.02 275 / 0.12);
+  --shadow-pop: 0 8px 28px oklch(0.2 0.02 275 / 0.12), 0 1px 3px oklch(0.2 0.02 275 / 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: oklch(0.17 0.008 275);
+    --surface: oklch(0.21 0.009 275);
+    --surface-2: oklch(0.245 0.01 275);
+    --surface-3: oklch(0.29 0.011 275);
+    --border: oklch(0.3 0.01 275);
+    --border-strong: oklch(0.38 0.012 275);
+    --text: oklch(0.96 0.004 85);
+    --text-2: oklch(0.78 0.008 275);
+    --text-3: oklch(0.68 0.01 275);
+    --brand: oklch(0.7 0.13 272);
+    --brand-hover: oklch(0.75 0.12 272);
+    --brand-fg: oklch(0.17 0.03 272);
+    --brand-soft: oklch(0.3 0.06 272);
+    --brand-soft-fg: oklch(0.86 0.07 272);
+    --success: oklch(0.76 0.14 152);
+    --success-soft: oklch(0.3 0.05 152);
+    --warning: oklch(0.82 0.13 80);
+    --warning-soft: oklch(0.32 0.05 70);
+    --danger: oklch(0.74 0.15 25);
+    --danger-soft: oklch(0.32 0.06 25);
+    --info: oklch(0.76 0.11 245);
+    --info-soft: oklch(0.3 0.05 245);
+    --focus: oklch(0.75 0.14 272);
+    --shadow-sheet: 0 -8px 32px oklch(0 0 0 / 0.5);
+    --shadow-pop: 0 8px 28px oklch(0 0 0 / 0.45), 0 1px 3px oklch(0 0 0 / 0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: oklch(0.17 0.008 275);
+  --surface: oklch(0.21 0.009 275);
+  --surface-2: oklch(0.245 0.01 275);
+  --surface-3: oklch(0.29 0.011 275);
+  --border: oklch(0.3 0.01 275);
+  --border-strong: oklch(0.38 0.012 275);
+  --text: oklch(0.96 0.004 85);
+  --text-2: oklch(0.78 0.008 275);
+  --text-3: oklch(0.68 0.01 275);
+  --brand: oklch(0.7 0.13 272);
+  --brand-hover: oklch(0.75 0.12 272);
+  --brand-fg: oklch(0.17 0.03 272);
+  --brand-soft: oklch(0.3 0.06 272);
+  --brand-soft-fg: oklch(0.86 0.07 272);
+  --success: oklch(0.76 0.14 152);
+  --success-soft: oklch(0.3 0.05 152);
+  --warning: oklch(0.82 0.13 80);
+  --warning-soft: oklch(0.32 0.05 70);
+  --danger: oklch(0.74 0.15 25);
+  --danger-soft: oklch(0.32 0.06 25);
+  --info: oklch(0.76 0.11 245);
+  --info-soft: oklch(0.3 0.05 245);
+  --focus: oklch(0.75 0.14 272);
+  --shadow-sheet: 0 -8px 32px oklch(0 0 0 / 0.5);
+  --shadow-pop: 0 8px 28px oklch(0 0 0 / 0.45), 0 1px 3px oklch(0 0 0 / 0.3);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-fg: var(--brand-fg);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-soft-fg: var(--brand-soft-fg);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-focus: var(--focus);
+
+  --font-sans: var(--font-geist), var(--font-devanagari), ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale: 13 / 15 / 17 / 20 / 24 / 32 / 40. Body is 17. */
+  --text-xs: 13px;
+  --text-xs--line-height: 18px;
+  --text-sm: 15px;
+  --text-sm--line-height: 22px;
+  --text-base: 17px;
+  --text-base--line-height: 26px;
+  --text-lg: 20px;
+  --text-lg--line-height: 28px;
+  --text-xl: 24px;
+  --text-xl--line-height: 32px;
+  --text-2xl: 32px;
+  --text-2xl--line-height: 40px;
+  --text-3xl: 40px;
+  --text-3xl--line-height: 48px;
+
+  --radius-input: 10px;
+  --radius-card: 14px;
+  --radius-sheet: 20px;
+
+  --shadow-sheet: var(--shadow-sheet);
+  --shadow-pop: var(--shadow-pop);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Devanagari needs a little more air. */
+  :lang(hi) body {
+    line-height: 1.6;
+  }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--brand-soft);
+    color: var(--brand-soft-fg);
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  /* Striped pattern for "ending soon" seats — pattern, not just colour. */
+  .pattern-stripes {
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0 5px,
+      color-mix(in oklch, var(--warning) 22%, transparent) 5px 8px
+    );
+  }
+  .pattern-cross {
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 6px, var(--border-strong) 6px 7px),
+      repeating-linear-gradient(-45deg, transparent 0 6px, var(--border-strong) 6px 7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

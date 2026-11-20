@@ -103,3 +103,11 @@ describe("display", () => {
     expect(() => hhmmToMinutes("25:00")).toThrow();
   });
 });
+
+describe("compact shift times", () => {
+  it("drops :00", async () => {
+    const { formatMinutesShort } = await import("@/lib/dates");
+    expect(formatMinutesShort(360, "en").toLowerCase()).toBe("6 am");
+    expect(formatMinutesShort(750, "en").toLowerCase()).toBe("12:30 pm");
+  });
+});

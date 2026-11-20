@@ -161,6 +161,18 @@ export function formatMinutes(min: number, locale: AppLocale): string {
   }).format(new Date(Date.UTC(2000, 0, 1, h, mm)));
 }
 
+/** Compact: "6 am", "12:30 pm" — drops ":00". */
+export function formatMinutesShort(min: number, locale: AppLocale): string {
+  const h = Math.floor(min / 60) % 24;
+  const mm = min % 60;
+  return new Intl.DateTimeFormat(locale === "hi" ? "hi-IN" : "en-IN", {
+    timeZone: "UTC",
+    hour: "numeric",
+    ...(mm ? { minute: "2-digit" } : {}),
+    hour12: true,
+  }).format(new Date(Date.UTC(2000, 0, 1, h, mm)));
+}
+
 export function minutesToHHMM(min: number): string {
   return `${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
 }
