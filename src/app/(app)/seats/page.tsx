@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/patterns/empty-state";
 import { PageHeader } from "@/components/patterns/page-header";
 import { getShifts } from "@/lib/data/library";
 import { todayInTz } from "@/lib/dates";
-import { getSeatBoard } from "@/lib/data/seats";
+import { getSeatBoard, getSeatUsage } from "@/lib/data/seats";
 import { requireLibrary } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Seats" };
@@ -14,8 +14,9 @@ export const metadata: Metadata = { title: "Seats" };
 export default async function SeatsPage() {
   const { membership } = await requireLibrary();
   const today = todayInTz(membership.timezone);
-  const [zones, shifts, t] = await Promise.all([
+  const [zones, usage, shifts, t] = await Promise.all([
     getSeatBoard(membership.libraryId, today),
+    getSeatUsage(membership.libraryId, today),
     getShifts(membership.libraryId),
     getTranslations("seats"),
   ]);
@@ -27,7 +28,7 @@ export default async function SeatsPage() {
       {zones.length === 0 ? (
         <EmptyState icon={Armchair} title={t("noSeats")} />
       ) : (
-        <SeatMap zones={zones} shifts={shifts} today={today} />
+        <SeatMap zones={zones} shifts={shifts} today={today} usage={usage} libraryId={membership.libraryId} />
       )}
     </div>
   );

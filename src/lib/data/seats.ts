@@ -6,6 +6,7 @@ export type SeatOccupant = {
   subscriptionId: string;
   studentId: string;
   studentName: string;
+  phone: string;
   shiftId: string;
   startMin: number;
   endMin: number;
@@ -22,7 +23,7 @@ export type SeatView = {
   tags: string[];
   occupants: SeatOccupant[];
 };
-export type ZoneView = { id: string | null; name: string; seats: SeatView[] };
+export type ZoneView = { id: string | null; name: string; girlsOnly: boolean; seats: SeatView[] };
 
 function parseRange(r: string): [number, number] {
   // Postgres int4range text, e.g. "[360,720)".
@@ -33,11 +34,11 @@ function parseRange(r: string): [number, number] {
 export async function getSeatBoard(libraryId: string, onDate: string): Promise<ZoneView[]> {
   const supabase = await createClient();
   const [zones, seats, subs, dues] = await Promise.all([
-    supabase.from("zones").select("id, name, sort_order").eq("library_id", libraryId).order("sort_order"),
+    supabase.from("zones").select("id, name, sort_order, attributes").eq("library_id", libraryId).order("sort_order"),
     supabase.from("seats").select("id, label, x, y, is_active, tags, zone_id").eq("library_id", libraryId),
     supabase
       .from("subscriptions")
-      .select("id, seat_id, shift_id, shift_minutes, end_date, status, student:students!inner(id, name)")
+      .select("id, seat_id, shift_id, shift_minutes, end_date, status, student:students!inner(id, name, phone)")
       .eq("library_id", libraryId)
       .in("status", ["active", "paused", "upcoming"])
       .lte("start_date", onDate)
@@ -61,6 +62,7 @@ export async function getSeatBoard(libraryId: string, onDate: string): Promise<Z
       subscriptionId: s.id,
       studentId: s.student.id,
       studentName: s.student.name,
+      phone: s.student.phone,
       shiftId: s.shift_id,
       startMin,
       endMin,
@@ -72,9 +74,10 @@ export async function getSeatBoard(libraryId: string, onDate: string): Promise<Z
   }
 
   const collator = new Intl.Collator("en", { numeric: true });
-  const toView = (z: { id: string | null; name: string }): ZoneView => ({
+  const toView = (z: { id: string | null; name: string; attributes?: unknown }): ZoneView => ({
     id: z.id,
     name: z.name,
+    girlsOnly: Boolean((z.attributes as { girls_only?: boolean } | undefined)?.girls_only),
     seats: seats
       .data!.filter((s) => s.zone_id === z.id)
       .map((s) => ({
@@ -98,4 +101,38 @@ export async function getSeatBoard(libraryId: string, onDate: string): Promise<Z
 export const EXPIRING_DAYS = 7;
 export function isEndingSoon(endDate: string, today: string) {
   return endDate <= addDays(today, EXPIRING_DAYS);
+}
+
+/**
+ * How full each seat was over the last 30 days, 0–100: booked shift-minutes
+ * divided by the hours the library is open. Spots seats nobody wants.
+ */
+export async function getSeatUsage(libraryId: string, today: string): Promise<Record<string, number>> {
+  const supabase = await createClient();
+  const from = addDays(today, -29);
+  const [subs, shifts] = await Promise.all([
+    supabase
+      .from("subscriptions")
+      .select("seat_id, shift_minutes, start_date, end_date")
+      .eq("library_id", libraryId)
+      .neq("status", "cancelled")
+      .not("seat_id", "is", null)
+      .lte("start_date", today)
+      .gte("end_date", from),
+    supabase.from("shifts").select("start_min, end_min").eq("library_id", libraryId).eq("is_active", true),
+  ]);
+  if (subs.error) throw subs.error;
+  if (shifts.error) throw shifts.error;
+  const open = Math.max(...shifts.data.map((s) => s.end_min), 0) - Math.min(...shifts.data.map((s) => s.start_min), 1440);
+  if (open <= 0) return {};
+  const used: Record<string, number> = {};
+  for (const s of subs.data) {
+    const [a, b] = parseRange(s.shift_minutes as unknown as string);
+    const start = s.start_date > from ? s.start_date : from;
+    const end = s.end_date < today ? s.end_date : today;
+    const days = Math.max(0, Math.round((Date.parse(end) - Date.parse(start)) / 86_400_000) + 1);
+    used[s.seat_id!] = (used[s.seat_id!] ?? 0) + (b - a) * days;
+  }
+  const total = open * 30;
+  return Object.fromEntries(Object.entries(used).map(([k, v]) => [k, Math.min(100, Math.round((v / total) * 100))]));
 }
