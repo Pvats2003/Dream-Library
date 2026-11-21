@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { signOut } from "@/actions/auth";
 import { LogoMark } from "@/components/brand/logo";
-import { LanguageSwitch, LibrarySwitch, ThemeSwitch } from "@/components/features/preferences";
+import { FeedbackSwitch, LanguageSwitch, LibrarySwitch, ThemeSwitch } from "@/components/features/preferences";
 import { PageHeader } from "@/components/patterns/page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -108,6 +108,11 @@ export default async function MorePage() {
 
       <Section title={t("theme")}>
         <ThemeSwitch initial={isThemePref(themeCookie) ? themeCookie : "system"} />
+      </Section>
+
+      <Section title={t("payFeedback")}>
+        <FeedbackSwitch />
+        <p className="mt-2 text-[15px] text-text-2">{t("payFeedbackHint")}</p>
       </Section>
 
       {help ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import { BellRing, CircleCheck, EllipsisVertical, IndianRupee, Loader2, MessageCircle, RefreshCw, X } from "lucide-react";
+import { AlertCircle, BellRing, CircleCheck, Clock, EllipsisVertical, IndianRupee, Loader2, MessageCircle, RefreshCw, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -8,7 +8,7 @@ import { useEffect, useState, useTransition } from "react";
 import { logReminder, quickRenew, snoozeInvoice } from "@/actions/fees";
 import { EmptyState } from "@/components/patterns/empty-state";
 import { Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet } from "@/components/ui/sheet";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
@@ -50,6 +50,8 @@ export function FeesInbox({
   const [selecting, setSelecting] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [batch, setBatch] = useState<OpenInvoice[] | null>(null);
+  // Desktop: which fee is open in the right-hand panel.
+  const [focusId, setFocusId] = useState<string | null>(null);
   const [busy, start] = useTransition();
   // One-time tip about the swipe shortcuts. Shown as a floating note so the
   // list never jumps under someone's finger.
@@ -100,6 +102,8 @@ export function FeesInbox({
     { key: "week", title: t("thisWeek"), items: invoices.filter((i) => i.dueDate > today), tone: "text-text-2" },
   ].filter((g) => g.items.length > 0);
   const total = invoices.reduce((n, i) => n + i.owed, 0);
+  const focus = invoices.find((i) => i.id === focusId) ?? invoices[0] ?? null;
+  const payFor = (inv: OpenInvoice) => setPay({ invoiceId: inv.id, studentId: inv.studentId, studentName: inv.studentName, phone: inv.phone, owedPaise: inv.owed });
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
   return (
@@ -130,9 +134,19 @@ export function FeesInbox({
       </header>
 
       {groups.length === 0 && ending.length === 0 ? (
-        <EmptyState icon={CircleCheck} title={t("empty")} body={t("emptyBody")} />
+        <EmptyState art="owl" title={t("empty")} body={t("emptyBody")} action={<Link href="/students" className={buttonVariants({ variant: "secondary", block: true })}>{t("emptyAction")}</Link>} />
       ) : null}
 
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
+      {focus && !selecting ? (
+        <FeeDetail
+          inv={focus}
+          today={today}
+          onPaid={() => payFor(focus)}
+          onRemind={() => remind(focus)}
+          onSnooze={() => setSnoozeFor(focus)}
+        />
+      ) : null}
       <div className="flex flex-col gap-6">
         {groups.map((g) => (
           <section key={g.key} aria-labelledby={`fees-${g.key}`}>
@@ -155,7 +169,11 @@ export function FeesInbox({
                       onLongPress={() => setSnoozeFor(inv)}
                     >
                       <div
-                        className={cn("flex gap-3 px-4 py-3", isSel && "bg-brand-soft")}
+                        className={cn(
+                          "relative flex gap-3 px-4 py-3",
+                          isSel && "bg-brand-soft",
+                          !selecting && focus?.id === inv.id && "lg:bg-brand-soft lg:shadow-[inset_3px_0_0_var(--brand)]",
+                        )}
                         onClick={selecting ? (e) => !(e.target as HTMLElement).closest("input, a") && toggle(inv.id) : undefined}
                       >
                         {selecting ? (
@@ -169,9 +187,18 @@ export function FeesInbox({
                         ) : (
                           <Avatar name={inv.studentName} />
                         )}
+                        {!selecting ? (
+                          <button
+                            type="button"
+                            className="absolute inset-0 hidden lg:block"
+                            aria-label={t("openDetails", { name: inv.studentName })}
+                            aria-pressed={focus?.id === inv.id}
+                            onClick={() => setFocusId(inv.id)}
+                          />
+                        ) : null}
                         <div className="min-w-0 flex-1">
                           <div className="flex items-start justify-between gap-3">
-                            <Link href={`/students/${inv.studentId}`} className="min-w-0 truncate text-base font-semibold hover:underline">
+                            <Link href={`/students/${inv.studentId}`} className="relative min-w-0 truncate text-base font-semibold hover:underline">
                               {inv.studentName}
                             </Link>
                             <span className="shrink-0 text-lg font-bold tabular">{formatINR(inv.owed)}</span>
@@ -185,7 +212,7 @@ export function FeesInbox({
                               .join(" · ")}
                           </p>
                           {!selecting ? (
-                            <div className="mt-2.5 flex gap-2 sm:max-w-md">
+                            <div className="mt-2.5 flex gap-2 sm:max-w-md lg:hidden">
                               <Button
                                 size="sm"
                                 variant="success"
@@ -250,7 +277,8 @@ export function FeesInbox({
           </section>
         ) : null}
 
-        {snoozed > 0 ? <p className="text-center text-sm text-text-3">{t("snoozedCount", { count: snoozed })}</p> : null}
+        {snoozed > 0 ? <p className="text-center text-[15px] text-text-3">{t("snoozedCount", { count: snoozed })}</p> : null}
+      </div>
       </div>
 
       {selecting ? (
@@ -290,6 +318,66 @@ export function FeesInbox({
       />
       <BatchRemind items={batch} onClose={() => setBatch(null)} onRemind={remind} />
     </div>
+  );
+}
+
+/** Desktop right-hand panel: everything about one fee, with the actions. */
+function FeeDetail({ inv, today, onPaid, onRemind, onSnooze }: { inv: OpenInvoice; today: string; onPaid: () => void; onRemind: () => void; onSnooze: () => void }) {
+  const t = useTranslations("fees");
+  const locale = useLocale() as AppLocale;
+  const late = daysBetween(inv.dueDate, today);
+  return (
+    <aside className="sticky top-6 hidden rounded-[20px] lg:order-last lg:col-start-2 lg:row-start-1 border border-border bg-surface p-6 shadow-sm lg:block" aria-label={inv.studentName}>
+      <div className="flex items-center gap-3">
+        <Avatar name={inv.studentName} className="size-14 text-lg" />
+        <div className="min-w-0">
+          <p className="truncate text-xl font-semibold">{inv.studentName}</p>
+          <p className="text-[15px] text-text-2 tabular">{[inv.seatLabel, inv.planName].filter(Boolean).join(" · ")}</p>
+        </div>
+      </div>
+      <p className="mt-6 text-[15px] font-medium text-text-2">{t("owes")}</p>
+      <p className="text-[44px] leading-tight font-bold tracking-tight tabular">{formatINR(inv.owed)}</p>
+      <p className={cn("mt-1 inline-flex items-center gap-1.5 text-[15px] font-semibold", late > 0 ? "text-danger" : "text-warning")}>
+        {late > 0 ? <AlertCircle className="size-4" aria-hidden /> : <Clock className="size-4" aria-hidden />}
+        {late > 0 ? t("pendingSince", { days: late }) : t("dueIn", { days: -late })}
+      </p>
+      <dl className="mt-5 divide-y divide-border rounded-[14px] border border-border text-[15px]">
+        <div className="flex justify-between gap-3 px-4 py-3">
+          <dt className="text-text-2">{t("dueOn")}</dt>
+          <dd className="font-semibold">{formatDay(inv.dueDate, locale)}</dd>
+        </div>
+        {inv.periodEnd ? (
+          <div className="flex justify-between gap-3 px-4 py-3">
+            <dt className="text-text-2">{t("coversTill")}</dt>
+            <dd className="font-semibold">{formatDay(inv.periodEnd, locale)}</dd>
+          </div>
+        ) : null}
+        {inv.amountPaid > 0 ? (
+          <div className="flex justify-between gap-3 px-4 py-3">
+            <dt className="text-text-2">{t("alreadyPaid")}</dt>
+            <dd className="font-semibold tabular">{formatINR(inv.amountPaid)}</dd>
+          </div>
+        ) : null}
+      </dl>
+      <div className="mt-6 flex flex-col gap-2">
+        <Button variant="success" size="lg" block onClick={onPaid}>
+          <IndianRupee aria-hidden />
+          {t("recordPaid")}
+        </Button>
+        <Button variant="secondary" block onClick={onRemind}>
+          <MessageCircle aria-hidden />
+          {t("remind")}
+        </Button>
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="ghost" onClick={onSnooze}>
+            {t("later")}
+          </Button>
+          <Link href={`/students/${inv.studentId}`} className={buttonVariants({ variant: "ghost" })}>
+            {t("profile")}
+          </Link>
+        </div>
+      </div>
+    </aside>
   );
 }
 

@@ -27,7 +27,7 @@ export function TabBar() {
                 onPointerDown={() => router.prefetch(href)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-full flex-col items-center justify-center gap-0.5 text-xs font-semibold",
+                  "flex h-full flex-col items-center justify-center gap-0.5 text-[15px] leading-tight font-semibold",
                   active ? "text-brand" : "text-text-2",
                 )}
               >

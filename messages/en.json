@@ -70,7 +70,21 @@
     "seeSeats": "See seats",
     "totalSeats": "{count} seats in total",
     "paymentsTodayLabel": "Payments today",
-    "studentsUnit": "students"
+    "studentsUnit": "students",
+    "greetName": "{greeting}, {name} ji",
+    "greetPlain": "{greeting}",
+    "collectionToday": "Today's collection",
+    "feesPending": "Fees pending",
+    "attention": "Needs your attention",
+    "attentionCount": "{count, plural, one {1 person} other {# people}}",
+    "owesSince": "{amount} · {days, plural, =0 {due today} one {1 day late} other {# days late}}",
+    "pendingDays": "{days, plural, =0 {due today} one {1 day late} other {# days late}}",
+    "planEnds": "Plan ends {date}",
+    "remind": "Remind",
+    "seeAll": "See all {count}",
+    "allDoneTitle": "All of this week's fees are in",
+    "allDoneBody": "Nobody owes anything right now. Well done!",
+    "shiftsTitle": "Seats free in each shift"
   },
   "seats": {
     "title": "Seats",
@@ -108,7 +122,15 @@
     "errTaken": "That seat isn't free. Pick another.",
     "errFailed": "Couldn't do that. Please try again.",
     "live": "Live",
-    "shiftWord": "{shift} shift"
+    "shiftWord": "{shift} shift",
+    "shiftPicker": "Pick a shift",
+    "zoom": "Seat size",
+    "zoomIn": "Bigger seats",
+    "zoomOut": "Smaller seats",
+    "girlsOnly": "Girls",
+    "ofTotal": "{total} in all",
+    "noSeatsBody": "Draw your hall once and every seat shows up here.",
+    "noSeatsAction": "Set up seats"
   },
   "students": {
     "title": "Students",
@@ -124,7 +146,11 @@
     "filterActive": "Active",
     "filterLeft": "Left",
     "searchPlaceholder": "Search by name, phone or seat",
-    "noMatch": "Nobody matches \"{query}\""
+    "noMatch": "Nobody matches \"{query}\"",
+    "emptyBody": "Add your first student, or share the QR poster so students can fill in their own details.",
+    "emptyAction": "Add a new student",
+    "pickOne": "Pick a student from the list",
+    "pickOneBody": "Their seat, plan, fees and attendance open here."
   },
   "fees": {
     "title": "Fees",
@@ -184,7 +210,15 @@
     "errAlreadyPaid": "This fee is already fully paid",
     "errBadAmount": "Enter a correct amount",
     "errFailed": "Couldn't do that. Check the internet and try again.",
-    "lateDays": "{days, plural, one {1 day} other {# days}}"
+    "lateDays": "{days, plural, one {1 day} other {# days}}",
+    "emptyAction": "See students",
+    "openDetails": "Show details for {name}",
+    "owes": "Still to pay",
+    "dueOn": "Due on",
+    "coversTill": "Covers till",
+    "alreadyPaid": "Already paid",
+    "later": "Remind later",
+    "profile": "Profile"
   },
   "more": {
     "title": "More",
@@ -202,7 +236,11 @@
     "helpBody": "Chat with Priyanshu on WhatsApp",
     "logout": "Log out",
     "loggedInAs": "Logged in as {phone}",
-    "switchLibrary": "Switch library"
+    "switchLibrary": "Switch library",
+    "payFeedback": "Sound when money comes in",
+    "payFeedbackHint": "A soft buzz and tick when you record a payment.",
+    "off": "Off",
+    "on": "On"
   },
   "noLibrary": {
     "title": "Your number isn't linked to a library",
@@ -307,7 +345,9 @@
     "errOverpayment": "Can't take more than the fee.",
     "errFailed": "Couldn't save. Check the internet and try again.",
     "errLoad": "Couldn't load. Please try again.",
-    "noPlans": "Set up plans in Settings first."
+    "noPlans": "Set up plans in Settings first.",
+    "deleteDigit": "Delete last digit",
+    "seatFound": "Seat booked!"
   },
   "profile": {
     "back": "Students",
@@ -602,7 +642,8 @@
     "errSeatTaken": "That seat isn't free. Pick another.",
     "errAlreadyDone": "This request was already confirmed or removed.",
     "errFailed": "Couldn't do that. Please try again.",
-    "errInvalid": "Name, a correct mobile number and a plan are needed."
+    "errInvalid": "Name, a correct mobile number and a plan are needed.",
+    "emptyAction": "See the QR poster"
   },
   "receipt": {
     "title": "Fee receipt",
@@ -625,7 +666,12 @@
     "print": "PDF / Print",
     "notFound": "Receipt not found",
     "notFoundBody": "Check that the whole link was copied.",
-    "generated": "Receipt made with LibraryOS"
+    "generated": "Receipt made with LibraryOS",
+    "seatShift": "Seat & shift",
+    "seatValue": "Seat {label}",
+    "validity": "Valid for",
+    "time": "Time",
+    "poweredBy": "Receipt made with LibraryOS"
   },
   "pay": {
     "hello": "Hi {name}",

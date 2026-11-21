@@ -35,3 +35,26 @@ export function ShiftRing({ free, total, label, sublabel, ariaLabel }: { free: n
     </figure>
   );
 }
+
+/** A small ring for zone cards: how full, as a share of seats. */
+export function MiniRing({ taken, total, className }: { taken: number; total: number; className?: string }) {
+  const r = 15;
+  const c = 2 * Math.PI * r;
+  const share = total > 0 ? taken / total : 0;
+  return (
+    <svg viewBox="0 0 40 40" className={cn("size-10 -rotate-90", className)} aria-hidden>
+      <circle cx="20" cy="20" r={r} fill="none" strokeWidth="5" className="stroke-surface-3" />
+      <circle
+        cx="20"
+        cy="20"
+        r={r}
+        fill="none"
+        strokeWidth="5"
+        strokeLinecap="round"
+        opacity={share > 0 ? 1 : 0}
+        strokeDasharray={`${c * share} ${c}`}
+        className="stroke-brand transition-[stroke-dasharray] duration-700 ease-out"
+      />
+    </svg>
+  );
+}

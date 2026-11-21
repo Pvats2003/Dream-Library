@@ -28,7 +28,7 @@ export default async function AppLayout({
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <OfflineBanner />
-          <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-safe pb-28 sm:px-6 lg:px-10 lg:pb-12">
+          <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-safe pb-28 sm:px-6 lg:px-10 lg:pb-12">
             {children}
           </main>
         </div>

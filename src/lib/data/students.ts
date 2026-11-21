@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 export type StudentListItem = {
@@ -14,7 +15,8 @@ export type StudentListItem = {
   photoUrl: string | null;
 };
 
-export async function getStudentList(libraryId: string, today: string): Promise<StudentListItem[]> {
+/** Cached per request: the desktop list pane and the page can both ask. */
+export const getStudentList = cache(async (libraryId: string, today: string): Promise<StudentListItem[]> => {
   const supabase = await createClient();
   const [students, subs, dues] = await Promise.all([
     supabase
@@ -61,4 +63,4 @@ export async function getStudentList(libraryId: string, today: string): Promise<
       photoUrl: urlFor(s.photo_path),
     };
   });
-}
+});

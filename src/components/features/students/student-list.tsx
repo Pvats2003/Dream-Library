@@ -1,11 +1,13 @@
 "use client";
 
-import { Search, Users } from "lucide-react";
+import { Plus, Search, Users } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { EmptyState } from "@/components/patterns/empty-state";
+import { useAdmit } from "@/components/features/admit/admit-provider";
+import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Segmented } from "@/components/ui/segmented";
 import { StatusPill } from "@/components/ui/status-pill";
@@ -33,11 +35,19 @@ export function StudentList({
   today: string;
 }) {
   const t = useTranslations("students");
+  const openAdmit = useAdmit();
   const router = useRouter();
+  const pathname = usePathname();
   const ts = useTranslations("seats");
   const locale = useLocale() as AppLocale;
   const [filter, setFilter] = useState<"current" | "left">("current");
   const [query, setQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+  // Someone may start typing before the page has finished loading: keep it.
+  useEffect(() => {
+    const typed = searchRef.current?.value ?? "";
+    if (typed) setQuery(typed);
+  }, []);
   const q = useDeferredValue(query.trim().toLowerCase());
 
   const shown = useMemo(() => {
@@ -64,6 +74,7 @@ export function StudentList({
           aria-hidden
         />
         <input
+          ref={searchRef}
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -84,10 +95,21 @@ export function StudentList({
       />
 
       {shown.length === 0 ? (
-        <EmptyState
-          icon={Users}
-          title={q ? t("noMatch", { query }) : t("empty")}
-        />
+        q ? (
+          <EmptyState icon={Users} title={t("noMatch", { query })} />
+        ) : (
+          <EmptyState
+            art="books"
+            title={t("empty")}
+            body={t("emptyBody")}
+            action={
+              <Button block onClick={() => openAdmit()}>
+                <Plus aria-hidden />
+                {t("emptyAction")}
+              </Button>
+            }
+          />
+        )
       ) : (
         <ul className="mt-3 divide-y divide-border overflow-hidden rounded-[14px] border border-border bg-surface">
           {shown.map((s) => {
@@ -98,7 +120,8 @@ export function StudentList({
                   href={`/students/${s.id}`}
                   onPointerDown={() => router.prefetch(`/students/${s.id}`)}
                   onMouseEnter={() => router.prefetch(`/students/${s.id}`)}
-                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2"
+                  aria-current={pathname === `/students/${s.id}` ? "page" : undefined}
+                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2 aria-[current=page]:bg-brand-soft aria-[current=page]:shadow-[inset_3px_0_0_var(--brand)]"
                 >
                   <Avatar name={s.name} src={s.photoUrl} />
                   <div className="min-w-0 flex-1">

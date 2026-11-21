@@ -33,11 +33,13 @@ test("a student fills the QR form without logging in, and the owner confirms the
   await card.getByRole("button", { name: "देखें और पक्का करें" }).click();
   await page.getByRole("dialog").getByRole("button", { name: "पक्का करें" }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect(page.locator("li", { hasText: "QR Student" })).toHaveCount(0);
+  // Gone from the requests list (it now shows up in the student list instead).
+  await expect(page.getByRole("list", { name: "नए अनुरोध" }).locator("li", { hasText: "QR Student" })).toHaveCount(0);
 
   await page.goto("/students");
   await page.getByPlaceholder("नाम, फ़ोन या सीट से खोजें").fill(phone.slice(-6));
-  await expect(page.locator("main ul").getByText("QR Student")).toBeVisible();
+  // Waits for the search to filter the list down to this one student.
+  await expect(page.locator("main ul li").filter({ hasText: "QR Student" })).toHaveCount(1);
 });
 
 test("a wrong join link says so and shows no library data", async ({ page }) => {

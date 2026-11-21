@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useState, useSyncExternalStore, useTransition } from "react";
+import { feedbackOn, paymentFeedback, setFeedback } from "@/lib/client/feedback";
 import { setActiveLibrary, setLocale, setTheme } from "@/actions/preferences";
 import { Segmented } from "@/components/ui/segmented";
 import type { ThemePref } from "@/lib/theme";
@@ -51,6 +52,35 @@ export function ThemeSwitch({ initial }: { initial: ThemePref }) {
         { value: "system", label: t("themeSystem") },
         { value: "light", label: t("themeLight") },
         { value: "dark", label: t("themeDark") },
+      ]}
+    />
+  );
+}
+
+const noop = () => () => {};
+
+/** Buzz + soft tick when money is received. Off by default. */
+export function FeedbackSwitch() {
+  const t = useTranslations("more");
+  const stored = useSyncExternalStore(
+    noop,
+    () => (feedbackOn() ? "on" : "off"),
+    () => "off" as const,
+  );
+  const [choice, setValue] = useState<"off" | "on" | null>(null);
+  const value = choice ?? stored;
+  return (
+    <Segmented
+      label={t("payFeedback")}
+      value={value}
+      onChange={(v) => {
+        setValue(v);
+        setFeedback(v === "on");
+        if (v === "on") paymentFeedback(true);
+      }}
+      options={[
+        { value: "off", label: t("off") },
+        { value: "on", label: t("on") },
       ]}
     />
   );

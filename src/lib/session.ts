@@ -19,6 +19,8 @@ export type Membership = {
   membershipId: string;
   libraryId: string;
   libraryName: string;
+  /** What the library calls this person, e.g. "Rajesh". */
+  displayName: string;
   librarySlug: string;
   city: string | null;
   timezone: string;
@@ -56,7 +58,7 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
 
   const { data: rows } = await supabase
     .from("memberships")
-    .select("id, role, permissions, library:libraries!inner(id, name, slug, city, timezone, setup_completed_at)")
+    .select("id, role, permissions, display_name, library:libraries!inner(id, name, slug, city, timezone, setup_completed_at)")
     .eq("user_id", sub)
     .eq("is_active", true)
     .order("created_at");
@@ -69,6 +71,7 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
       membershipId: r.id,
       libraryId: r.library.id,
       libraryName: r.library.name,
+      displayName: r.display_name,
       librarySlug: r.library.slug,
       city: r.library.city,
       timezone: r.library.timezone,

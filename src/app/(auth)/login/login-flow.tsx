@@ -128,6 +128,8 @@ export function LoginFlow() {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={step}
+          // Server can't know the phone's "reduce motion" setting; the style differs harmlessly.
+          suppressHydrationWarning
           {...slide}
           transition={{ type: "spring", stiffness: 400, damping: 34 }}
           className="pt-6"

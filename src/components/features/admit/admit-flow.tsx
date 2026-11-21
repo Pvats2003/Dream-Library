@@ -27,6 +27,10 @@ import { formatINR } from "@/lib/money";
 import { formatMobile, normalizeIndianMobile, phoneDigits } from "@/lib/phone";
 import { isSeatFree, suggestSeats, type SeatInfo } from "@/lib/seats";
 import { fillTemplate } from "@/lib/templates";
+import { Keypad, useBigKeypad } from "@/components/ui/keypad";
+import { paymentFeedback } from "@/lib/client/feedback";
+import { SeatTile } from "@/components/features/seats/seat-tile";
+import { initials } from "@/components/ui/avatar";
 
 export type AdmitPrefill = { seatId?: string; shiftId?: string; phone?: string };
 
@@ -42,6 +46,7 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
   const [data, setData] = useState<AdmitData | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [step, setStep] = useState<Step>("phone");
+  const bigKeys = useBigKeypad();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -282,6 +287,7 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
         return;
       }
       setResult(res);
+      if (paying > 0) paymentFeedback();
       setStep("done");
       navigator.vibrate?.([20, 40, 20]);
       router.refresh();
@@ -324,6 +330,15 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
         )
       }
     >
+      <div
+        onKeyDown={(e) => {
+          // Desktop: Enter moves on from any step (Tab moves between fields).
+          const el = e.target as HTMLElement;
+          if (e.key !== "Enter" || e.shiftKey || step === "done" || el.closest("textarea, button, a, [role=radio]")) return;
+          e.preventDefault();
+          if (!primaryDisabled) next();
+        }}
+      >
       {step !== "done" ? (
         <div className="mb-5 flex items-center gap-3" aria-hidden>
           <div className="flex flex-1 gap-1.5">
@@ -363,7 +378,7 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
                 <Input
                   id="admit-phone"
                   type="tel"
-                  inputMode="numeric"
+                  inputMode={bigKeys ? "none" : "numeric"}
                   autoComplete="off"
                   autoFocus
                   placeholder="98765 43210"
@@ -377,9 +392,18 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
                     setExisting(null);
                     setError(null);
                   }}
-                  onKeyDown={(e) => e.key === "Enter" && !primaryDisabled && next()}
                 />
               </div>
+              {bigKeys ? (
+                <Keypad
+                  deleteLabel={t("deleteDigit")}
+                  onKey={(k) => {
+                    setDigits((d) => (k === "del" ? d.slice(0, -1) : (d + k).slice(0, 10)));
+                    setExisting(null);
+                    setError(null);
+                  }}
+                />
+              ) : null}
               {existing && existing.status !== "left" ? (
                 <div className="mt-4 rounded-[14px] border border-info/40 bg-info-soft p-4">
                   <p className="text-base font-semibold text-info">{t("existsTitle")}</p>
@@ -595,7 +619,7 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
                   <label htmlFor="admit-part" className="mb-2 block text-sm font-semibold text-text-2">
                     {t("amountReceived")}
                   </label>
-                  <MoneyInput id="admit-part" autoFocus valuePaise={partPaise} onChange={setPartPaise} invalid={(partPaise ?? 0) > due} />
+                  <MoneyInput id="admit-part" autoFocus keypad={bigKeys} deleteLabel={t("deleteDigit")} valuePaise={partPaise} onChange={setPartPaise} invalid={(partPaise ?? 0) > due} />
                   {partPaise && partPaise < due ? <p className="mt-1.5 text-sm text-text-2">{t("remaining", { amount: formatINR(due - partPaise) })}</p> : null}
                 </div>
               ) : null}
@@ -678,6 +702,7 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
           ) : null}
         </>
       )}
+      </div>
     </Sheet>
   );
 }
@@ -945,10 +970,22 @@ function DoneStep({
 
   return (
     <section className="flex flex-col items-center pt-2 pb-2 text-center">
-      <div className="grid size-20 place-items-center rounded-full bg-success-soft text-success">
-        <CircleCheck className="size-11" strokeWidth={2.2} aria-hidden />
-      </div>
-      <h3 className="mt-4 text-2xl font-bold tracking-tight">{mode === "renew" ? t("doneRenewTitle", { name }) : t("doneTitle", { name })}</h3>
+      {seatLabel ? (
+        <>
+          <div className="relative grid size-28 place-items-center rounded-full bg-success-soft">
+            <div className="seat-land w-16 [container-type:inline-size]">
+              <SeatTile state="taken" label={seatLabel} initials={initials(name)} tabIndex={-1} aria-hidden />
+            </div>
+            <CircleCheck className="absolute -right-1 bottom-1 size-9 rounded-full bg-surface text-success" strokeWidth={2.2} aria-hidden />
+          </div>
+          <p className="mt-4 font-display text-[28px] leading-tight text-success">{t("seatFound")}</p>
+        </>
+      ) : (
+        <div className="grid size-20 place-items-center rounded-full bg-success-soft text-success">
+          <CircleCheck className="size-11" strokeWidth={2.2} aria-hidden />
+        </div>
+      )}
+      <h3 className={cn("text-2xl font-bold tracking-tight", seatLabel ? "mt-1" : "mt-4")}>{mode === "renew" ? t("doneRenewTitle", { name }) : t("doneTitle", { name })}</h3>
       <p className="mt-1 text-sm text-text-3 tabular">{formatMobile(phone, true)}</p>
       <dl className="mt-5 w-full divide-y divide-border rounded-[14px] border border-border text-left">
         <div className="flex items-center gap-3 px-4 py-3">

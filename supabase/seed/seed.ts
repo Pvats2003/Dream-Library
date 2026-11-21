@@ -26,7 +26,7 @@ if (!SERVICE_KEY) {
 // Test logins. They must match [auth.sms.test_otp] in supabase/config.toml
 // (or the test phone numbers configured in the hosted Supabase dashboard).
 export const TEST_USERS = {
-  owner: { phone: "+919999900001", name: "Dream Library Owner" },
+  owner: { phone: "+919999900001", name: "Rajesh Kumar" },
   manager: { phone: "+919999900002", name: "Ravi (Manager)" },
   desk: { phone: "+919999900003", name: "Sonu (Desk)" },
   otherOwner: { phone: "+919999900009", name: "Test Library Owner" },

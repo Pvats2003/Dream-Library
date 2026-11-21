@@ -13,6 +13,8 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:3000",
     trace: "off",
+    // Numbers count up on Today; tests read the final value straight away.
+    contextOptions: { reducedMotion: "reduce" },
     // Lets a machine with a pre-installed Chromium use it (e.g. PW_CHROMIUM_PATH=/opt/pw-browsers/chromium).
     launchOptions: process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {},
   },

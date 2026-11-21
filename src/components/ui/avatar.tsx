@@ -1,8 +1,16 @@
 import { cn } from "@/lib/cn";
 
-function initials(name: string) {
+/** First letter of first and last name. Hindi letters keep their vowel marks. */
+export function initials(name: string) {
   const parts = name.replace(/^Md\.?\s+/i, "").trim().split(/\s+/);
-  return ((parts[0]?.[0] ?? "") + (parts.length > 1 ? (parts.at(-1)?.[0] ?? "") : "")).toUpperCase();
+  const first = (w?: string) => {
+    if (!w) return "";
+    const seg = new Intl.Segmenter("hi", { granularity: "grapheme" }).segment(w)[Symbol.iterator]().next().value;
+    return seg?.segment ?? "";
+  };
+  // Hindi letter clusters (क्षि, श्री) are wide: one is enough.
+  if (/[\u0900-\u097F]/.test(parts[0] ?? "")) return first(parts[0]);
+  return (first(parts[0]) + (parts.length > 1 ? first(parts.at(-1)) : "")).toUpperCase();
 }
 
 // A stable, soft hue per person so the list is easy to scan.

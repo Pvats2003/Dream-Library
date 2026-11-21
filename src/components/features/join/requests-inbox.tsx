@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CircleCheck, Inbox, Loader2, QrCode, UserPlus } from "lucide-react";
+import { AlertCircle, CircleCheck, Loader2, QrCode, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -99,9 +99,9 @@ export function RequestsInbox({ requests, data, existingPhones }: { requests: Jo
       </div>
 
       {items.length === 0 ? (
-        <EmptyState icon={Inbox} title={t("empty")} body={t("emptyBody")} />
+        <EmptyState art="owl" title={t("empty")} body={t("emptyBody")} action={<Link href="/more/join" className={buttonVariants({ variant: "secondary", block: true })}>{t("emptyAction")}</Link>} />
       ) : (
-        <ul className="mt-4 space-y-3">
+        <ul className="mt-4 space-y-3" aria-label={t("title")}>
           {items.map(({ request: r, proposal: p }) => (
             <li key={r.id} className="rounded-[14px] border border-border bg-surface p-4">
               <div className="flex items-start gap-3">

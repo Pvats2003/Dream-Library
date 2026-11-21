@@ -21,12 +21,12 @@ export function StatusPill({ status, label, className }: { status: Status; label
   return (
     <span
       className={cn(
-        "inline-flex h-7 items-center gap-1 rounded-full pl-2 pr-2.5 text-xs font-semibold whitespace-nowrap",
+        "inline-flex h-8 items-center gap-1.5 rounded-full pl-2.5 pr-3 text-sm font-semibold whitespace-nowrap",
         cls,
         className,
       )}
     >
-      <Icon className="size-3.5" strokeWidth={2.5} aria-hidden />
+      <Icon className="size-4" strokeWidth={2.25} aria-hidden />
       {label}
     </span>
   );

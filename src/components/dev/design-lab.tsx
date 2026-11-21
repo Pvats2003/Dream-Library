@@ -1,11 +1,11 @@
 "use client";
 
-import { AlertCircle, CircleCheck, Clock, IndianRupee, Inbox, MessageCircle } from "lucide-react";
+import { CircleCheck, IndianRupee, Inbox, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 import { LogoMark } from "@/components/brand/logo";
 import { LanguageSwitch, ThemeSwitch } from "@/components/features/preferences";
-import { TILE } from "@/components/features/seats/seat-map";
+import { SeatTile } from "@/components/features/seats/seat-tile";
 import { EmptyState } from "@/components/patterns/empty-state";
 import { ShiftRing } from "@/components/patterns/shift-ring";
 import { Avatar } from "@/components/ui/avatar";
@@ -449,13 +449,9 @@ function Components() {
               ["inactive", "A5", t("pill_off")],
             ] as const
           ).map(([state, label, caption]) => (
-            <div key={state} className="flex flex-col items-center gap-1.5">
-              <div className={cn("relative grid size-14 place-items-center rounded-[10px] text-sm font-bold tabular", TILE[state])}>
-                {label}
-                {state === "overdue" ? <AlertCircle className="absolute -top-1.5 -right-1.5 size-4 rounded-full bg-surface text-danger" aria-hidden /> : null}
-                {state === "expiring" ? <Clock className="absolute -top-1.5 -right-1.5 size-4 rounded-full bg-surface text-warning" aria-hidden /> : null}
-              </div>
-              <span className="text-xs text-text-3">{caption}</span>
+            <div key={state} className="flex w-16 flex-col items-center gap-1.5">
+              <SeatTile state={state} label={label} initials={state === "taken" || state === "expiring" || state === "overdue" ? "RK" : undefined} tabIndex={-1} />
+              <span className="text-center text-sm text-text-2">{caption}</span>
             </div>
           ))}
         </div>

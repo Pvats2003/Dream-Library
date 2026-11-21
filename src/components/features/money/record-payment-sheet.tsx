@@ -1,5 +1,6 @@
 "use client";
 
+import { paymentFeedback } from "@/lib/client/feedback";
 import { CircleCheck, Loader2, MessageCircle, QrCode, Receipt } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
@@ -99,7 +100,7 @@ export function RecordPaymentSheet({
           t(res.error === "overpayment" ? "errOverpayment" : res.error === "alreadyPaid" ? "errAlreadyPaid" : res.error === "badAmount" ? "errBadAmount" : "errFailed"),
         );
       }
-      navigator.vibrate?.([20, 40, 20]);
+      paymentFeedback();
       setDone({ ...res, paid: amount });
     });
   }

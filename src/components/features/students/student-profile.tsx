@@ -131,7 +131,9 @@ export function StudentProfileView({
   return (
     <div className="pb-6">
       <div className="pt-4 lg:pt-8">
-        <BackLink href="/students">{t("back")}</BackLink>
+        <div className="lg:hidden">
+          <BackLink href="/students">{t("back")}</BackLink>
+        </div>
       </div>
 
       {/* Header */}

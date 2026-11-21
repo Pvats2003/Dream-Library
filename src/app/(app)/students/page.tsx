@@ -1,39 +1,22 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { AdmitAutoOpen } from "@/components/features/admit/admit-provider";
-import { StudentList } from "@/components/features/students/student-list";
-import { RequestsBanner } from "@/components/patterns/requests-banner";
-import { countPendingRequests } from "@/lib/data/requests";
-import { PageHeader } from "@/components/patterns/page-header";
-import { todayInTz } from "@/lib/dates";
-import { getStudentList } from "@/lib/data/students";
-import { requireLibrary } from "@/lib/session";
+import { EmptyState } from "@/components/patterns/empty-state";
 
 export const metadata: Metadata = { title: "Students" };
 
-export default async function StudentsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ add?: string }>;
-}) {
+/** The list itself lives in the layout. Desktop shows a hint on the right until someone is picked. */
+export default async function StudentsPage({ searchParams }: { searchParams: Promise<{ add?: string }> }) {
   const { add } = await searchParams;
-  const { membership } = await requireLibrary();
-  const today = todayInTz(membership.timezone);
-  const [students, t, pending] = await Promise.all([
-    getStudentList(membership.libraryId, today),
-    getTranslations("students"),
-    countPendingRequests(membership.libraryId),
-  ]);
-  const current = students.filter((s) => s.status !== "left").length;
+  const t = await getTranslations("students");
   return (
-    <div>
-      <PageHeader
-        title={t("title")}
-        subtitle={t("count", { count: current })}
-      />
+    <>
       <AdmitAutoOpen when={add === "1"} />
-      <RequestsBanner count={pending} />
-      <StudentList students={students} today={today} />
-    </div>
+      <div className="hidden pt-10 lg:block">
+        <div className="grid min-h-[60dvh] place-items-center rounded-[20px] border border-dashed border-border-strong">
+          <EmptyState art="books" title={t("pickOne")} body={t("pickOneBody")} />
+        </div>
+      </div>
+    </>
   );
 }

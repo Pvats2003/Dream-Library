@@ -1,4 +1,5 @@
-import { Armchair } from "lucide-react";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { SeatMap } from "@/components/features/seats/seat-map";
@@ -26,7 +27,7 @@ export default async function SeatsPage() {
     <div>
       <PageHeader title={t("title")} subtitle={t("freeCount", { count: free })} />
       {zones.length === 0 ? (
-        <EmptyState icon={Armchair} title={t("noSeats")} />
+        <EmptyState art="desk" title={t("noSeats")} body={t("noSeatsBody")} action={<Link href="/setup/seats" className={buttonVariants({ block: true })}>{t("noSeatsAction")}</Link>} />
       ) : (
         <SeatMap zones={zones} shifts={shifts} today={today} usage={usage} libraryId={membership.libraryId} />
       )}
