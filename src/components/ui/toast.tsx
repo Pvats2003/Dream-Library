@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleAlert, CircleCheck } from "lucide-react";
+import { Check, X as Cross } from "lucide-react";
 import { useEffect, useSyncExternalStore } from "react";
 import { cn } from "@/lib/cn";
 
@@ -51,13 +51,15 @@ function ToastItem({ t }: { t: Toast }) {
     const id = setTimeout(() => dismiss(t.id), t.tone === "error" ? 7000 : 5000);
     return () => clearTimeout(id);
   }, [t]);
-  const Icon = t.tone === "success" ? CircleCheck : CircleAlert;
+  const Icon = t.tone === "success" ? Check : Cross;
   return (
     <div
       role={t.tone === "error" ? "alert" : "status"}
       className="toast-in pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-[14px] bg-text px-4 py-3 text-bg shadow-[var(--shadow-pop)]"
     >
-      <Icon className={cn("size-5 shrink-0", t.tone === "success" ? "text-success" : "text-danger")} aria-hidden />
+      <span className={cn("grid size-6 shrink-0 place-items-center rounded-full text-on-solid", t.tone === "success" ? "bg-success-solid" : "bg-danger-solid")}>
+        <Icon className="size-4" aria-hidden />
+      </span>
       <p className="flex-1 text-base font-medium">{t.message}</p>
       {t.action ? (
         <button
@@ -71,6 +73,20 @@ function ToastItem({ t }: { t: Toast }) {
           {t.action.label}
         </button>
       ) : null}
+    </div>
+  );
+}
+
+/** A still copy of a toast, for the Design Lab. */
+export function ToastPreview({ message, tone = "success", actionLabel }: { message: string; tone?: Toast["tone"]; actionLabel?: string }) {
+  const Icon = tone === "success" ? Check : Cross;
+  return (
+    <div className="flex w-full max-w-md items-center gap-3 rounded-[14px] bg-text px-4 py-3 text-bg shadow-[var(--shadow-pop)]">
+      <span className={cn("grid size-6 shrink-0 place-items-center rounded-full text-on-solid", tone === "success" ? "bg-success-solid" : "bg-danger-solid")}>
+        <Icon className="size-4" aria-hidden />
+      </span>
+      <p className="flex-1 text-base font-medium">{message}</p>
+      {actionLabel ? <span className="h-10 shrink-0 rounded-[10px] px-3 py-2 text-base font-semibold text-brand-soft">{actionLabel}</span> : null}
     </div>
   );
 }

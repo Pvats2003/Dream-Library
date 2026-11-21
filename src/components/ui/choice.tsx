@@ -92,7 +92,7 @@ export function MoneyInput({
           onChange(digits ? Number(digits) * 100 : null);
         }}
         className={cn(
-          "h-14 w-full rounded-[10px] border border-border-strong bg-surface pr-4 pl-10 text-xl font-semibold tabular",
+          "h-14 w-full rounded-[10px] border border-border-input bg-surface pr-4 pl-10 text-xl font-semibold tabular",
           "focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none",
           invalid && "border-danger",
         )}

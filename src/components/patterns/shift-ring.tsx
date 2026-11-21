@@ -21,6 +21,7 @@ export function ShiftRing({ free, total, label, sublabel, ariaLabel }: { free: n
             fill="none"
             strokeWidth="6"
             strokeLinecap="round"
+            opacity={taken > 0 ? 1 : 0}
             strokeDasharray={`${c * taken} ${c}`}
             className={cn("transition-[stroke-dasharray] duration-700 ease-out", low ? "stroke-warning" : "stroke-brand")}
           />

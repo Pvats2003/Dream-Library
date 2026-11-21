@@ -53,11 +53,11 @@ export function SwipeRow({
   return (
     <div className="relative overflow-hidden">
       <div aria-hidden className="absolute inset-0 flex items-center justify-between">
-        <span className={cn("flex h-full items-center gap-2 bg-success px-5 font-semibold text-white transition-opacity", dx > 20 ? "opacity-100" : "opacity-0")}>
+        <span className={cn("flex h-full items-center gap-2 bg-success-solid px-5 font-semibold text-on-solid transition-opacity", dx > 20 ? "opacity-100" : "opacity-0")}>
           <IndianRupee className="size-5" />
           {rightLabel}
         </span>
-        <span className={cn("ml-auto flex h-full items-center gap-2 bg-info px-5 font-semibold text-white transition-opacity", dx < -20 ? "opacity-100" : "opacity-0")}>
+        <span className={cn("ml-auto flex h-full items-center gap-2 bg-[var(--upcoming)] px-5 font-semibold text-on-solid transition-opacity", dx < -20 ? "opacity-100" : "opacity-0")}>
           {leftLabel}
           <MessageCircle className="size-5" />
         </span>

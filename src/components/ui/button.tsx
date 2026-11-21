@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { Slot } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
@@ -10,19 +11,19 @@ import { cn } from "@/lib/cn";
 export const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[12px] font-semibold select-none",
-    "transition-[background-color,color,transform,box-shadow] duration-150 ease-out active:scale-[0.98]",
-    "disabled:opacity-50 disabled:active:scale-100",
-    "[&_svg]:size-5 [&_svg]:shrink-0",
+    "transition-[background-color,color,transform,box-shadow,border-color] duration-150 ease-out active:scale-[0.97]",
+    "disabled:opacity-45 disabled:active:scale-100 aria-busy:cursor-progress",
+    "[&_svg]:size-5 [&_svg]:shrink-0 aria-busy:[&>svg:not([data-spin])]:hidden",
   ],
   {
     variants: {
       variant: {
-        primary: "bg-brand text-brand-fg hover:bg-brand-hover",
-        secondary: "bg-surface text-text border border-border-strong hover:bg-surface-2",
-        soft: "bg-brand-soft text-brand-soft-fg hover:brightness-[0.97]",
-        ghost: "text-text-2 hover:bg-surface-2 hover:text-text",
-        danger: "bg-danger text-white hover:brightness-95",
-        success: "bg-success text-white hover:brightness-95",
+        primary: "bg-brand text-brand-fg shadow-sm hover:bg-brand-hover active:bg-brand-press",
+        secondary: "border border-border-strong bg-surface text-text hover:border-border-heavy hover:bg-surface-hover active:bg-surface-press",
+        soft: "bg-brand-soft text-brand-soft-fg hover:brightness-[0.97] active:brightness-[0.94]",
+        ghost: "text-text-2 hover:bg-surface-hover hover:text-text active:bg-surface-press",
+        danger: "bg-danger-solid text-on-solid shadow-sm hover:brightness-[0.95] active:brightness-[0.9]",
+        success: "bg-success-solid text-on-solid shadow-sm hover:brightness-[0.95] active:brightness-[0.9]",
       },
       size: {
         md: "h-12 px-4 text-base",
@@ -35,9 +36,26 @@ export const buttonVariants = cva(
   },
 );
 
-type ButtonProps = ComponentProps<"button"> & VariantProps<typeof buttonVariants> & { asChild?: boolean };
+type ButtonProps = ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+    /** Shows a spinner in place of the icon and blocks repeat taps. */
+    loading?: boolean;
+  };
 
-export function Button({ className, variant, size, block, asChild, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot.Root : "button";
-  return <Comp className={cn(buttonVariants({ variant, size, block }), className)} {...props} />;
+export function Button({ className, variant, size, block, asChild, loading, children, disabled, ...props }: ButtonProps) {
+  if (asChild) {
+    return <Slot.Root className={cn(buttonVariants({ variant, size, block }), className)} {...props}>{children}</Slot.Root>;
+  }
+  return (
+    <button
+      className={cn(buttonVariants({ variant, size, block }), className)}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      {...props}
+    >
+      {loading ? <Loader2 data-spin="" className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
+      {children}
+    </button>
+  );
 }

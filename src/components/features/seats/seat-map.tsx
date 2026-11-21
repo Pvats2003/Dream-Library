@@ -55,7 +55,7 @@ function stateFor(seat: MapSeat, range: [number, number] | null, today: string):
 
 // Every state differs by fill/pattern and, where it matters, an icon —
 // never by colour alone.
-const TILE: Record<SeatState, string> = {
+export const TILE: Record<SeatState, string> = {
   free: "border-2 border-dashed border-border-strong bg-surface text-text-2",
   taken: "border-2 border-transparent bg-brand text-brand-fg",
   expiring: "border-2 border-warning bg-warning-soft pattern-stripes text-text",

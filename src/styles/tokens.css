@@ -1,0 +1,251 @@
+/*
+ * LibraryOS design tokens — "a quiet, warm library at night".
+ *
+ * Layers:
+ *   1. Scales   --n-1 … --n-12 (warm neutral), brand, amber accent
+ *   2. Roles    --bg, --surface, --text, --border … (what components use)
+ *   3. Status   --paid, --due-soon, --overdue, --upcoming, --free (+ -soft, -fg)
+ *
+ * Rules: status is never shown by colour alone (always icon + word); amber
+ * is a rare accent (a lamp glow), never a status colour; every text/background
+ * pair is AA-checked by tests/unit/contrast.test.ts in both themes.
+ *
+ * Tokens apply to :root and to any element with data-theme, so a panel can
+ * be previewed in the other theme (Design Lab).
+ */
+
+/* ------------------------------------------------------------------ light */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Warm neutral: paper, not clinical white. Hue ~80, very low chroma. */
+  --n-1: oklch(0.985 0.004 85); /* app background */
+  --n-2: oklch(0.972 0.005 85); /* subtle background */
+  --n-3: oklch(0.948 0.006 85); /* element background */
+  --n-4: oklch(0.928 0.007 85); /* hovered element */
+  --n-5: oklch(0.905 0.008 85); /* pressed element */
+  --n-6: oklch(0.885 0.008 85); /* subtle border */
+  --n-7: oklch(0.83 0.009 85); /* border */
+  --n-8: oklch(0.74 0.01 85); /* strong border */
+  --n-9: oklch(0.6 0.01 80); /* solid neutral */
+  --n-10: oklch(0.54 0.01 80);
+  --n-11: oklch(0.45 0.012 275); /* secondary text */
+  --n-12: oklch(0.21 0.015 275); /* primary text: ink, slightly indigo */
+  --surface: oklch(1 0 0); /* cards: plain white paper */
+  --text-3: oklch(0.5 0.012 275); /* hints, captions */
+  --border-input: oklch(0.6 0.01 80); /* 3:1 so fields are easy to see */
+  --on-solid: oklch(0.99 0.003 85); /* text on solid green / red buttons */
+
+  /* Brand: deep indigo (overridable per library later). */
+  --brand: oklch(0.45 0.165 272);
+  --brand-hover: oklch(0.4 0.165 272);
+  --brand-press: oklch(0.36 0.15 272);
+  --brand-fg: oklch(0.99 0.003 272);
+  --brand-soft: oklch(0.95 0.028 272);
+  --brand-soft-fg: oklch(0.38 0.15 272);
+
+  /* Amber accent: a reading-lamp glow. Decorative, sparingly. */
+  --accent: oklch(0.8 0.13 78);
+  --accent-soft: oklch(0.95 0.045 85);
+  --accent-fg: oklch(0.45 0.1 65);
+
+  /* Status */
+  --paid: oklch(0.47 0.12 152);
+  --paid-soft: oklch(0.95 0.045 152);
+  --paid-fg: oklch(0.42 0.11 152);
+  --due-soon: oklch(0.6 0.15 55);
+  --due-soon-soft: oklch(0.955 0.04 60);
+  --due-soon-fg: oklch(0.48 0.13 50);
+  --overdue: oklch(0.5 0.19 27);
+  --overdue-soft: oklch(0.955 0.03 27);
+  --overdue-fg: oklch(0.47 0.18 27);
+  --upcoming: oklch(0.52 0.13 245);
+  --upcoming-soft: oklch(0.955 0.03 245);
+  --upcoming-fg: oklch(0.45 0.12 245);
+  --free: var(--n-9);
+  --free-soft: var(--n-2);
+  --free-fg: var(--n-11);
+
+  --focus: oklch(0.55 0.2 272);
+  --scrim: oklch(0.2 0.02 275 / 0.45);
+  --shadow-sm: 0 1px 2px oklch(0.2 0.02 275 / 0.06);
+  --shadow-pop: 0 8px 28px oklch(0.2 0.02 275 / 0.12), 0 1px 3px oklch(0.2 0.02 275 / 0.08);
+  --shadow-sheet: 0 -8px 32px oklch(0.2 0.02 275 / 0.12);
+  --glow: 0 0 0 transparent;
+}
+
+/* ------------------------------------------------------------------- dark */
+/* A library at night: charcoal-indigo walls, warm paper-coloured text,
+   tiles that glow softly like desk lamps. Never pure black. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --n-1: oklch(0.175 0.014 275);
+  --n-2: oklch(0.2 0.016 275);
+  --n-3: oklch(0.232 0.018 275);
+  --n-4: oklch(0.26 0.019 275);
+  --n-5: oklch(0.29 0.02 275);
+  --n-6: oklch(0.31 0.02 275);
+  --n-7: oklch(0.36 0.02 275);
+  --n-8: oklch(0.45 0.02 275);
+  --n-9: oklch(0.58 0.015 80);
+  --n-10: oklch(0.64 0.015 80);
+  --n-11: oklch(0.79 0.012 80);
+  --n-12: oklch(0.95 0.008 85);
+  --surface: oklch(0.205 0.017 275);
+  --text-3: oklch(0.7 0.012 80);
+  --border-input: oklch(0.56 0.016 275);
+  --on-solid: oklch(0.17 0.014 275);
+
+  --brand: oklch(0.72 0.12 272);
+  --brand-hover: oklch(0.77 0.11 272);
+  --brand-press: oklch(0.68 0.12 272);
+  --brand-fg: oklch(0.17 0.03 272);
+  --brand-soft: oklch(0.3 0.06 272);
+  --brand-soft-fg: oklch(0.87 0.07 272);
+
+  --accent: oklch(0.82 0.12 78);
+  --accent-soft: oklch(0.32 0.05 70);
+  --accent-fg: oklch(0.86 0.1 78);
+
+  --paid: oklch(0.74 0.14 152);
+  --paid-soft: oklch(0.3 0.05 152);
+  --paid-fg: oklch(0.82 0.12 152);
+  --due-soon: oklch(0.78 0.13 60);
+  --due-soon-soft: oklch(0.32 0.055 55);
+  --due-soon-fg: oklch(0.85 0.11 65);
+  --overdue: oklch(0.72 0.15 25);
+  --overdue-soft: oklch(0.32 0.065 25);
+  --overdue-fg: oklch(0.82 0.11 25);
+  --upcoming: oklch(0.74 0.11 245);
+  --upcoming-soft: oklch(0.3 0.05 245);
+  --upcoming-fg: oklch(0.84 0.08 245);
+  --free: var(--n-9);
+  --free-soft: var(--n-2);
+  --free-fg: var(--n-11);
+
+  --focus: oklch(0.78 0.13 272);
+  --scrim: oklch(0.1 0.02 275 / 0.6);
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
+  --shadow-pop: 0 8px 28px oklch(0 0 0 / 0.45), 0 1px 3px oklch(0 0 0 / 0.3);
+  --shadow-sheet: 0 -8px 32px oklch(0 0 0 / 0.5);
+  /* Desk-lamp glow for occupied seats at night. */
+  --glow: 0 0 14px oklch(0.8 0.12 78 / 0.18);
+}
+
+/* Phone set to dark and no explicit choice: same night palette. Kept in sync
+   with the block above by tests/unit/contrast.test.ts. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --n-1: oklch(0.175 0.014 275);
+    --n-2: oklch(0.2 0.016 275);
+    --n-3: oklch(0.232 0.018 275);
+    --n-4: oklch(0.26 0.019 275);
+    --n-5: oklch(0.29 0.02 275);
+    --n-6: oklch(0.31 0.02 275);
+    --n-7: oklch(0.36 0.02 275);
+    --n-8: oklch(0.45 0.02 275);
+    --n-9: oklch(0.58 0.015 80);
+    --n-10: oklch(0.64 0.015 80);
+    --n-11: oklch(0.79 0.012 80);
+    --n-12: oklch(0.95 0.008 85);
+    --surface: oklch(0.205 0.017 275);
+    --text-3: oklch(0.7 0.012 80);
+    --border-input: oklch(0.56 0.016 275);
+    --on-solid: oklch(0.17 0.014 275);
+
+    --brand: oklch(0.72 0.12 272);
+    --brand-hover: oklch(0.77 0.11 272);
+    --brand-press: oklch(0.68 0.12 272);
+    --brand-fg: oklch(0.17 0.03 272);
+    --brand-soft: oklch(0.3 0.06 272);
+    --brand-soft-fg: oklch(0.87 0.07 272);
+
+    --accent: oklch(0.82 0.12 78);
+    --accent-soft: oklch(0.32 0.05 70);
+    --accent-fg: oklch(0.86 0.1 78);
+
+    --paid: oklch(0.74 0.14 152);
+    --paid-soft: oklch(0.3 0.05 152);
+    --paid-fg: oklch(0.82 0.12 152);
+    --due-soon: oklch(0.78 0.13 60);
+    --due-soon-soft: oklch(0.32 0.055 55);
+    --due-soon-fg: oklch(0.85 0.11 65);
+    --overdue: oklch(0.72 0.15 25);
+    --overdue-soft: oklch(0.32 0.065 25);
+    --overdue-fg: oklch(0.82 0.11 25);
+    --upcoming: oklch(0.74 0.11 245);
+    --upcoming-soft: oklch(0.3 0.05 245);
+    --upcoming-fg: oklch(0.84 0.08 245);
+    --free: var(--n-9);
+    --free-soft: var(--n-2);
+    --free-fg: var(--n-11);
+
+    --focus: oklch(0.78 0.13 272);
+    --scrim: oklch(0.1 0.02 275 / 0.6);
+    --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.3);
+    --shadow-pop: 0 8px 28px oklch(0 0 0 / 0.45), 0 1px 3px oklch(0 0 0 / 0.3);
+    --shadow-sheet: 0 -8px 32px oklch(0 0 0 / 0.5);
+    --glow: 0 0 14px oklch(0.8 0.12 78 / 0.18);
+  }
+}
+
+/* ------------------------------------------------------------ role tokens */
+/* Components use these names. They follow the scales above in both themes. */
+:root,
+[data-theme] {
+  --bg: var(--n-1);
+  --surface-2: var(--n-2);
+  --surface-3: var(--n-3);
+  --surface-hover: var(--n-4);
+  --surface-press: var(--n-5);
+  --border: var(--n-6);
+  --border-strong: var(--n-7);
+  --border-heavy: var(--n-8);
+  --text: var(--n-12);
+  --text-2: var(--n-11);
+
+  /* Old names kept so every existing screen follows the new palette. */
+  --success: var(--paid-fg);
+  --success-soft: var(--paid-soft);
+  --success-solid: var(--paid);
+  --warning: var(--due-soon-fg);
+  --warning-soft: var(--due-soon-soft);
+  --warning-solid: var(--due-soon);
+  --danger: var(--overdue-fg);
+  --danger-soft: var(--overdue-soft);
+  --danger-solid: var(--overdue);
+  --info: var(--upcoming-fg);
+  --info-soft: var(--upcoming-soft);
+  --info-solid: var(--upcoming);
+
+  /* Type scale (px) — nothing important below 15. */
+  --fs-xs: 13px;
+  --fs-sm: 15px;
+  --fs-base: 17px;
+  --fs-lg: 20px;
+  --fs-xl: 24px;
+  --fs-2xl: 32px;
+  --fs-3xl: 40px;
+
+  /* Spacing: 4pt base. */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+
+  /* Radius. */
+  --r-input: 10px;
+  --r-button: 12px;
+  --r-card: 14px;
+  --r-sheet: 20px;
+
+  /* Motion. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+}

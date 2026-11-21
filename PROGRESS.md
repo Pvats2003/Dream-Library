@@ -161,3 +161,12 @@ The automated admit takes about 1.7 s, so the only real limit on the 60-second g
 - The Help button in More is hidden until `NEXT_PUBLIC_SUPPORT_WHATSAPP` (Priyanshu's number) is set.
 - The app isn't installable (PWA) yet; that's phase 6.
 - Real SMS: local and test logins use fixed test numbers. Any other number gets "कोड नहीं भेज पाए" because the SMS provider is a placeholder. Before real use we connect MSG91 or Twilio with DLT registration (see PLAN.md §2.2).
+
+## Design Step 1 — tokens, type and Design Lab (2026-11-21)
+
+- `src/styles/tokens.css`: deep indigo brand, 12-step warm neutral, amber lamp accent (rare), status colours paid / due soon / overdue / upcoming / free, deliberate light and charcoal-indigo dark. Every text pair is AA-checked by `tests/unit/contrast.test.ts` in both themes.
+- Fonts: Geist (tabular numbers) + Noto Sans Devanagari for everything; Fraunces + Tiro Devanagari Hindi only for greetings and the receipt title (not preloaded). Hindi line height 1.6.
+- Design Lab at `/dev/design` (signed-in, noindex): every token and primitive in every state, light/dark, Hindi/English.
+- Two review rounds (10 + 10 fixes): e.g. focus ring no longer changes shape, spinner replaces the icon while loading, solid-disc toast icons, empty shift ring shows no dot, clearer seat/status labels, type samples wrap instead of cutting off on phones.
+- Screenshots: `docs/screenshots/design-lab-{390,1440}-{light,dark}-{hi,en}.png`.
+- Checks: typecheck, lint, 131 unit tests, 42 e2e tests pass; no console errors or sideways scroll at 390/1440.
