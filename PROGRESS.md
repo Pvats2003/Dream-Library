@@ -192,3 +192,13 @@ The automated admit takes about 1.7 s, so the only real limit on the 60-second g
 **Checks:** typecheck, lint, 131 unit tests (incl. contrast), 42 e2e tests pass. Lighthouse mobile (production build): Welcome 99/100/100, Today 97/100/100, Seats 95/100/100, Students 99/100/100, Fees 81/100/96 (its "largest paint" is the one-time swipe tip; the list itself paints at ~1 s). Initial JS: Today ~149–158 KB gzipped (unchanged by the redesign; ~150 budget), Welcome 164 KB and Fees 200 KB were already above budget before this work.
 
 **Screenshots:** `docs/screenshots/` — every screen at 390 and 1440, light and dark, Hindi and English, plus 768 for the main tabs, the admit steps and the shared receipt photo.
+
+## Data download (backup) — 2026-11-21
+
+- More → "डेटा डाउनलोड करें (बैकअप)", **owners only** (it has every student's number and all money records; desk/manager get "403" from the download address too).
+- **Excel** (`/export/all.xlsx`): one tab each for स्टूडेंट, प्लान, फीस, पेमेंट, हाज़िरी, सीट. Bold frozen header with filters; rupees are real numbers (so totals work), dates are real dates, mobile numbers stay text. Built on the server with ExcelJS, so phones download no extra code.
+- **CSV** (`/export/<part>.csv`): the same six parts separately, UTF-8 with BOM so Hindi opens correctly in Excel and Google Sheets.
+- Reads go through the logged-in owner's own access (same database security rules as every screen), 1000 rows at a time so big libraries are complete.
+- Any text starting with = + - @ is defused so a name typed into the public QR form can never run as an Excel formula.
+- Tests: 5 unit (CSV format, Hindi, formula safety, rupees, time zone, file names) + 2 e2e (owner downloads and opens the Excel file; desk can't see or open it).
+- Note: ExcelJS pulls an old `uuid` with a "moderate" advisory that only applies to a way of calling it ExcelJS doesn't use.

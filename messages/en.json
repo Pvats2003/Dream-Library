@@ -797,5 +797,100 @@
     "pill_expiring": "Ending soon",
     "pill_off": "Not in use",
     "money": "Amount"
+  },
+  "export": {
+    "title": "Download your data (backup)",
+    "intro": "Keep a copy of all your students, fees and payments. Download once a month and save it to Google Drive or send it to yourself on WhatsApp — your records stay safe even if the phone is lost.",
+    "excel": "Excel file (everything together)",
+    "excelHint": "A separate tab for each: students, plans, fees, payments, attendance, seats",
+    "csvTitle": "Separate CSV files",
+    "csvHint": "For Google Sheets or any other software",
+    "ownerOnly": "Only the owner can download, because it has everyone's numbers and all the money records.",
+    "yes": "Yes",
+    "no": "No",
+    "sheet": {
+      "students": "Students",
+      "plans": "Plans",
+      "fees": "Fees",
+      "payments": "Payments",
+      "attendance": "Attendance",
+      "seats": "Seats"
+    },
+    "col": {
+      "name": "Name",
+      "mobile": "Mobile",
+      "altMobile": "Other mobile",
+      "guardian": "Family's number",
+      "gender": "Boy / girl",
+      "exam": "Exam",
+      "seat": "Seat",
+      "shift": "Shift",
+      "planEnds": "Plan ends",
+      "joined": "Joined",
+      "status": "Status",
+      "source": "How they found us",
+      "address": "Address",
+      "notes": "Notes",
+      "plan": "Plan",
+      "time": "Time",
+      "from": "From",
+      "to": "To",
+      "price": "Fee (₹)",
+      "discount": "Discount (₹)",
+      "discountReason": "Why discount",
+      "dueDate": "Due on",
+      "amount": "Amount (₹)",
+      "paid": "Paid (₹)",
+      "owed": "Still to pay (₹)",
+      "waivedReason": "Why waived",
+      "receipt": "Receipt no.",
+      "dateTime": "Date and time",
+      "method": "Paid by",
+      "upiNumber": "UPI number",
+      "receivedBy": "Received by",
+      "cancelReason": "Why cancelled",
+      "in": "Came in",
+      "out": "Left",
+      "hall": "Hall",
+      "seatOpen": "In use?"
+    },
+    "gender": {
+      "male": "Boy",
+      "female": "Girl",
+      "other": "Other"
+    },
+    "studentStatus": {
+      "active": "Active",
+      "paused": "Paused",
+      "left": "Left"
+    },
+    "planStatus": {
+      "upcoming": "Starts later",
+      "active": "Active",
+      "paused": "Paused",
+      "expired": "Ended",
+      "cancelled": "Cancelled"
+    },
+    "feeStatus": {
+      "due": "Pending",
+      "partial": "Part paid",
+      "paid": "Paid in full",
+      "waived": "Waived"
+    },
+    "method": {
+      "cash": "Cash",
+      "upi": "UPI",
+      "card": "Card",
+      "bank": "Bank"
+    },
+    "source": {
+      "walk_in": "Walked in",
+      "referral": "Someone told them",
+      "instagram": "Instagram",
+      "google": "Google",
+      "whatsapp": "WhatsApp",
+      "other": "Other"
+    },
+    "csvLabel": "Download {part} as CSV"
   }
 }

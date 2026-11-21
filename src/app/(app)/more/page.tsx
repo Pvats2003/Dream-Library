@@ -1,4 +1,4 @@
-import { ChevronRight, LogOut, MessageCircle, QrCode, Settings } from "lucide-react";
+import { ChevronRight, Download, FileSpreadsheet, FileText, LogOut, MessageCircle, QrCode, Settings } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -115,6 +115,8 @@ export default async function MorePage() {
         <p className="mt-2 text-[15px] text-text-2">{t("payFeedbackHint")}</p>
       </Section>
 
+      {membership.role === "owner" ? <DataDownload /> : null}
+
       {help ? (
         <Section title={t("help")}>
           <a
@@ -143,6 +145,61 @@ export default async function MorePage() {
         </form>
       </div>
     </div>
+  );
+}
+
+const CSV_PARTS = ["students", "plans", "fees", "payments", "attendance", "seats"] as const;
+
+/** Owner-only: the whole library as Excel, or one part at a time as CSV. */
+async function DataDownload() {
+  const t = await getTranslations("export");
+  return (
+    <section aria-labelledby="data-download">
+      <h2 id="data-download" className="mb-1 text-base font-semibold text-text-2">
+        {t("title")}
+      </h2>
+      <p className="mb-3 text-[15px] text-text-2">{t("intro")}</p>
+      <a
+        href="/export/all.xlsx"
+        download
+        className="flex items-center gap-3 rounded-[14px] border border-border bg-surface p-4 transition-colors hover:bg-surface-2"
+      >
+        <span className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-success-soft text-success">
+          <FileSpreadsheet className="size-6" aria-hidden />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-base font-semibold">{t("excel")}</span>
+          <span className="block text-[15px] text-text-2">{t("excelHint")}</span>
+        </span>
+        <Download className="size-5 shrink-0 text-text-3" aria-hidden />
+      </a>
+      <details className="group mt-2 rounded-[14px] border border-border bg-surface">
+        <summary className="flex h-14 cursor-pointer list-none items-center gap-3 px-4 [&::-webkit-details-marker]:hidden">
+          <FileText className="size-5 text-text-2" aria-hidden />
+          <span className="flex-1">
+            <span className="block text-base font-semibold">{t("csvTitle")}</span>
+          </span>
+          <ChevronRight className="size-5 text-text-3 transition-transform group-open:rotate-90" aria-hidden />
+        </summary>
+        <p className="px-4 pb-2 text-[15px] text-text-2">{t("csvHint")}</p>
+        <ul className="grid grid-cols-2 gap-2 px-4 pb-4">
+          {CSV_PARTS.map((p) => (
+            <li key={p}>
+              <a
+                href={`/export/${p}.csv`}
+                download
+                aria-label={t("csvLabel", { part: t(`sheet.${p}`) })}
+                className="flex h-12 items-center justify-center gap-2 rounded-[12px] border border-border-strong text-[15px] font-semibold hover:bg-surface-hover"
+              >
+                <Download className="size-4" aria-hidden />
+                {t(`sheet.${p}`)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+      <p className="mt-2 text-sm text-text-3">{t("ownerOnly")}</p>
+    </section>
   );
 }
 

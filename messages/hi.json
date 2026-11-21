@@ -797,5 +797,100 @@
     "pill_expiring": "जल्द खत्म",
     "pill_off": "बंद सीट",
     "money": "रकम"
+  },
+  "export": {
+    "title": "डेटा डाउनलोड करें (बैकअप)",
+    "intro": "अपने सारे स्टूडेंट, फीस और पेमेंट की फ़ाइल अपने फ़ोन में रख लें। हर महीने एक बार डाउनलोड करके Google Drive या WhatsApp पर खुद को भेज दें — फ़ोन खो जाए तब भी हिसाब सुरक्षित रहेगा।",
+    "excel": "Excel फ़ाइल (सब कुछ एक साथ)",
+    "excelHint": "हर चीज़ अलग पन्ने पर: स्टूडेंट, प्लान, फीस, पेमेंट, हाज़िरी, सीट",
+    "csvTitle": "अलग-अलग CSV फ़ाइल",
+    "csvHint": "Google Sheets या किसी और सॉफ़्टवेयर में डालने के लिए",
+    "ownerOnly": "सिर्फ़ मालिक डाउनलोड कर सकते हैं, क्योंकि इसमें सबके नंबर और पैसों का हिसाब है।",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "sheet": {
+      "students": "स्टूडेंट",
+      "plans": "प्लान",
+      "fees": "फीस",
+      "payments": "पेमेंट",
+      "attendance": "हाज़िरी",
+      "seats": "सीट"
+    },
+    "col": {
+      "name": "नाम",
+      "mobile": "मोबाइल",
+      "altMobile": "दूसरा मोबाइल",
+      "guardian": "घरवालों का नंबर",
+      "gender": "लड़का / लड़की",
+      "exam": "परीक्षा",
+      "seat": "सीट",
+      "shift": "शिफ्ट",
+      "planEnds": "प्लान कब तक",
+      "joined": "कब जुड़े",
+      "status": "स्थिति",
+      "source": "कैसे पता चला",
+      "address": "पता",
+      "notes": "नोट",
+      "plan": "प्लान",
+      "time": "समय",
+      "from": "कब से",
+      "to": "कब तक",
+      "price": "फीस (₹)",
+      "discount": "छूट (₹)",
+      "discountReason": "छूट क्यों",
+      "dueDate": "कब देनी थी",
+      "amount": "रकम (₹)",
+      "paid": "मिले (₹)",
+      "owed": "बाकी (₹)",
+      "waivedReason": "माफ़ क्यों",
+      "receipt": "रसीद नं.",
+      "dateTime": "तारीख और समय",
+      "method": "कैसे दिए",
+      "upiNumber": "UPI नंबर",
+      "receivedBy": "किसने लिए",
+      "cancelReason": "रद्द क्यों",
+      "in": "आए",
+      "out": "गए",
+      "hall": "हॉल",
+      "seatOpen": "चालू है?"
+    },
+    "gender": {
+      "male": "लड़का",
+      "female": "लड़की",
+      "other": "अन्य"
+    },
+    "studentStatus": {
+      "active": "चालू",
+      "paused": "रुका हुआ",
+      "left": "छोड़ चुके"
+    },
+    "planStatus": {
+      "upcoming": "आगे शुरू होगा",
+      "active": "चालू",
+      "paused": "रुका हुआ",
+      "expired": "खत्म",
+      "cancelled": "रद्द"
+    },
+    "feeStatus": {
+      "due": "बाकी",
+      "partial": "थोड़ी मिली",
+      "paid": "पूरी मिली",
+      "waived": "माफ़"
+    },
+    "method": {
+      "cash": "नकद",
+      "upi": "UPI",
+      "card": "कार्ड",
+      "bank": "बैंक"
+    },
+    "source": {
+      "walk_in": "खुद आए",
+      "referral": "किसी ने बताया",
+      "instagram": "Instagram",
+      "google": "Google",
+      "whatsapp": "WhatsApp",
+      "other": "अन्य"
+    },
+    "csvLabel": "{part} की CSV फ़ाइल डाउनलोड करें"
   }
 }
