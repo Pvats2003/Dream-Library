@@ -1,5 +1,36 @@
 # Progress
 
+## Phase 3: Fees, receipts, UPI and WhatsApp (21 Nov 2026)
+
+**Goal:** collect and remind fees end to end.
+
+### What you can do now
+- **फीस (Fees)** is now the collection screen: **बाकी है** (overdue) / **आज देनी है** (due today) / **इस हफ़्ते** (this week), plus **जल्द खत्म होने वाले प्लान** (plans ending soon). Every row has big labelled buttons: **पैसे मिले** (got paid), **याद दिलाएँ** (remind), and ⋮ to hide it for 1, 3 or 7 days. Shortcuts for quick hands: drag right = got paid, drag left = remind, long-press = hide for a few days. A one-time tip explains them.
+- **Taking money:** the amount is filled in (it can be changed for part payments), with UPI / नकद (cash) / कार्ड (card) / बैंक (bank). **"UPI QR दिखाएँ"** shows a QR for the exact amount that the student scans at the desk, plus an optional UPI reference number. Afterwards: the receipt number, **"WhatsApp पर रसीद भेजें"** (send receipt), and **"रसीद देखें"** (view receipt).
+- **Receipt page** (anyone with the link, no login): library name and address, receipt number, student (last 4 digits of their phone only), plan, period, seat, method, who received it, the amount in figures and in words ("एक हज़ार दो सौ रुपये मात्र"), and whether the period is fully paid. **"फ़ोटो की तरह भेजें"** turns it into a picture on the phone (so Hindi looks right) for sharing on WhatsApp; **"PDF / प्रिंट"** saves a PDF.
+- **Reminders:** the WhatsApp text picks gentle wording up to 3 days late and firmer after that, fills in the name, amount, date and seat, and includes a **pay link**. The pay link opens a page with the amount, a UPI QR, an "open UPI app" button and "tell the library on WhatsApp". Every reminder is logged.
+- **Remind several people:** tick students, then tap once per person (phones block opening many WhatsApp chats at once).
+- **Renew in one tap** from "plans ending soon": same plan and same seat (if someone else has taken the seat for the next period, it renews without a seat and says so), then it asks for the money straight away.
+- **Automatic next-month fees:** every night at 00:05 IST the app ends finished plans, starts next periods, ends pauses, and **creates next period's fee 3 days before a plan ends**, so it appears in "इस हफ़्ते".
+- **Student profile → पेमेंट:** "पैसे लें" (collect) on any pending fee, a receipt link on every payment, and for owner/manager **"गलती सुधारें"** (fix a mistake), which cancels a payment with a reason. Nothing is erased; the cancelled entry stays visible, crossed out, and its receipt says it was cancelled.
+- **और → WhatsApp संदेश** (owner): edit every message in Hindi and English. Fields appear as **[नाम]**, **[रकम]**, **[पैसे भेजने का लिंक]** and are added with buttons, with a WhatsApp-style preview.
+
+### Decisions
+- **Receipt picture is made on the phone, not the server.** The server image tool can't join Hindi letters correctly (matras and half-letters break). The phone's browser draws Hindi perfectly, so it makes the picture.
+- **No undo on payments.** Money needs a deliberate confirmation (the big green "₹600 मिल गए" button) rather than an undo toast. Fixing a mistake is the owner/manager-only cancel with a reason.
+
+### Tests
+| Suite | Result |
+|---|---|
+| Unit | 64 passed (+7: UPI links, WhatsApp links with Hindi, reminder wording) |
+| Database | 100 passed (+24: payment + receipt numbers, retry safety, no overpaying, paid fee can't be paid again, desk can't cancel, cancel needs a reason and works once, public receipt/pay pages, nightly renewals and expiry), local **and** live |
+| Browser | 42 passed (+10: desk collects → public receipt; reminder → pay link works; overpaying blocked; desk can't cancel; owner edits a message) |
+| Type check, lint, production build | clean |
+
+### Known gaps
+- Reminders still open WhatsApp for staff to press send. Fully automatic sending needs the WhatsApp Business API (paid, needs Meta approval); planned for later.
+- UPI payments are confirmed by staff tapping "पैसे मिल गए". Automatic confirmation needs a payment gateway such as Razorpay; planned for later.
+
 ## Moving existing students in: QR self-registration (21 Nov 2026)
 
 **Goal:** the owner shouldn't have to type every existing student by hand.

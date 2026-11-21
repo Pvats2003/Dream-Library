@@ -185,7 +185,7 @@ export function FeesInbox({
                               .join(" · ")}
                           </p>
                           {!selecting ? (
-                            <div className="mt-2.5 flex gap-2">
+                            <div className="mt-2.5 flex gap-2 sm:max-w-md">
                               <Button
                                 size="sm"
                                 variant="success"
@@ -233,7 +233,7 @@ export function FeesInbox({
                     </div>
                     <p className="text-sm font-medium text-info">{t("endsIn", { days: Math.max(0, daysBetween(today, p.endDate)) })}</p>
                     <p className="truncate text-sm text-text-2">{[p.planName, p.seatLabel, formatDay(p.endDate, locale)].filter(Boolean).join(" · ")}</p>
-                    <div className="mt-2.5 flex gap-2">
+                    <div className="mt-2.5 flex gap-2 sm:max-w-md">
                       <Button size="sm" variant="soft" className="h-10 flex-1" disabled={busy} onClick={() => renew(p)}>
                         {busy ? <Loader2 className="animate-spin" aria-hidden /> : <RefreshCw aria-hidden />}
                         {t("renew")}
