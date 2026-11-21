@@ -14,7 +14,7 @@ export function TabBar() {
   return (
     <nav
       aria-label="Main"
-      className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur-md lg:hidden"
+      className="pb-safe fixed inset-x-0 bottom-0 z-40 print:hidden border-t border-border bg-surface/95 backdrop-blur-md lg:hidden"
     >
       <ul className="mx-auto grid h-16 max-w-xl grid-cols-5">
         {NAV_ITEMS.map(({ href, key, Icon }) => {

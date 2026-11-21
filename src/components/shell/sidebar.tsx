@@ -13,7 +13,7 @@ export function Sidebar({ libraryName, city, action }: { libraryName: string; ci
   const router = useRouter();
   const t = useTranslations("nav");
   return (
-    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border bg-surface px-3 py-5 lg:flex">
+    <aside className="sticky top-0 hidden h-dvh w-64 print:!hidden shrink-0 flex-col border-r border-border bg-surface px-3 py-5 lg:flex">
       <div className="mb-6 flex items-center gap-3 px-2">
         <LogoMark className="size-10 rounded-[12px]" />
         <div className="min-w-0">

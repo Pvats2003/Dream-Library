@@ -351,6 +351,19 @@ async function main() {
       await q(`insert into public.waitlist (library_id, name, phone, desired_shift_id) values ($1, $2, $3, $4)`, [lib, name, phone, shifts[shift]]);
     }
 
+    // Existing students who filled in the join form and are waiting for approval.
+    for (const [name, phone, shift, seat, daysAgo, gender] of [
+      ["Ritika Kumari", "+917061234501", "morning", "G9", 12, "female"],
+      ["Sumit Raj", "+917061234502", "full", "E3", 20, "male"],
+      ["Neeraj Yadav", "+917061234503", "evening", null, null, "male"],
+    ] as const) {
+      await q(
+        `insert into public.join_requests (library_id, name, phone, gender, shift_id, seat_label, last_paid_on, exam_target)
+         values ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [lib, name, phone, gender, shifts[shift], seat, daysAgo === null ? null : addDays(today, -daysAgo), pick(EXAMS)],
+      );
+    }
+
     // Attendance: the last 14 days.
     const SHIFT_HOURS: Record<string, [number, number]> = { morning: [6, 12], evening: [12, 18], night: [18, 23], full: [6, 23] };
     for (const s of currentSubs) {

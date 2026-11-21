@@ -117,14 +117,14 @@ isOneToOne: false
                   ]
                 },"invoices": {
                   Row: {
-                    "amount_due_paise": number,"amount_paid_paise": number,"created_at": string,"created_by": string | null,"due_date": string,"id": string,"library_id": string,"note": string | null,"period_end": string | null,"period_start": string | null,"snoozed_until": string | null,"status": Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id": string | null,"updated_at": string,"waived_reason": string | null
+                    "amount_due_paise": number,"amount_paid_paise": number,"created_at": string,"created_by": string | null,"due_date": string,"id": string,"library_id": string,"note": string | null,"opening_paid_paise": number,"period_end": string | null,"period_start": string | null,"snoozed_until": string | null,"status": Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id": string | null,"updated_at": string,"waived_reason": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "amount_due_paise": number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date": string,"id"?: string,"library_id": string,"note"?: string | null,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
+                    "amount_due_paise": number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date": string,"id"?: string,"library_id": string,"note"?: string | null,"opening_paid_paise"?: number,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
                   }
                   Update: {
-                    "amount_due_paise"?: number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date"?: string,"id"?: string,"library_id"?: string,"note"?: string | null,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id"?: string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
+                    "amount_due_paise"?: number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date"?: string,"id"?: string,"library_id"?: string,"note"?: string | null,"opening_paid_paise"?: number,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id"?: string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
                   }
                   Relationships: [
                     {
@@ -145,6 +145,38 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "subscriptions"
       referencedColumns: ["id","library_id"]
+    }
+                  ]
+                },"join_requests": {
+                  Row: {
+                    "created_at": string,"exam_target": string | null,"gender": Database["public"]['Enums']["gender"] | null,"id": string,"last_paid_on": string | null,"library_id": string,"name": string,"phone": string,"reviewed_at": string | null,"reviewed_by": string | null,"seat_label": string | null,"shift_id": string | null,"source": string,"status": Database["public"]['Enums']["join_request_status"],"student_id": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"exam_target"?: string | null,"gender"?: Database["public"]['Enums']["gender"] | null,"id"?: string,"last_paid_on"?: string | null,"library_id": string,"name": string,"phone": string,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"seat_label"?: string | null,"shift_id"?: string | null,"source"?: string,"status"?: Database["public"]['Enums']["join_request_status"],"student_id"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"exam_target"?: string | null,"gender"?: Database["public"]['Enums']["gender"] | null,"id"?: string,"last_paid_on"?: string | null,"library_id"?: string,"name"?: string,"phone"?: string,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"seat_label"?: string | null,"shift_id"?: string | null,"source"?: string,"status"?: Database["public"]['Enums']["join_request_status"],"student_id"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "join_requests_library_id_fkey"
+      columns: ["library_id"]
+isOneToOne: false
+      referencedRelation: "libraries"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "join_requests_shift_id_library_id_fkey"
+      columns: ["shift_id","library_id"]
+isOneToOne: false
+      referencedRelation: "shifts"
+      referencedColumns: ["id","library_id"]
+    },{
+      foreignKeyName: "join_requests_student_id_fkey"
+      columns: ["student_id"]
+isOneToOne: false
+      referencedRelation: "students"
+      referencedColumns: ["id"]
     }
                   ]
                 },"leads": {
@@ -169,14 +201,14 @@ isOneToOne: false
                   ]
                 },"libraries": {
                   Row: {
-                    "address": string | null,"brand_color": string,"city": string | null,"created_at": string,"created_by": string | null,"currency": string,"id": string,"lat": number | null,"lng": number | null,"logo_path": string | null,"name": string,"receipt_prefix": string,"settings": NonNullable<Json>,"setup_completed_at": string | null,"slug": string,"timezone": string,"updated_at": string,"upi_id": string | null,"whatsapp_number": string | null
+                    "address": string | null,"brand_color": string,"city": string | null,"created_at": string,"created_by": string | null,"currency": string,"id": string,"join_code": string,"lat": number | null,"lng": number | null,"logo_path": string | null,"name": string,"receipt_prefix": string,"settings": NonNullable<Json>,"setup_completed_at": string | null,"slug": string,"timezone": string,"updated_at": string,"upi_id": string | null,"whatsapp_number": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "address"?: string | null,"brand_color"?: string,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"lat"?: number | null,"lng"?: number | null,"logo_path"?: string | null,"name": string,"receipt_prefix"?: string,"settings"?: NonNullable<Json>,"setup_completed_at"?: string | null,"slug": string,"timezone"?: string,"updated_at"?: string,"upi_id"?: string | null,"whatsapp_number"?: string | null
+                    "address"?: string | null,"brand_color"?: string,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"join_code"?: string,"lat"?: number | null,"lng"?: number | null,"logo_path"?: string | null,"name": string,"receipt_prefix"?: string,"settings"?: NonNullable<Json>,"setup_completed_at"?: string | null,"slug": string,"timezone"?: string,"updated_at"?: string,"upi_id"?: string | null,"whatsapp_number"?: string | null
                   }
                   Update: {
-                    "address"?: string | null,"brand_color"?: string,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"lat"?: number | null,"lng"?: number | null,"logo_path"?: string | null,"name"?: string,"receipt_prefix"?: string,"settings"?: NonNullable<Json>,"setup_completed_at"?: string | null,"slug"?: string,"timezone"?: string,"updated_at"?: string,"upi_id"?: string | null,"whatsapp_number"?: string | null
+                    "address"?: string | null,"brand_color"?: string,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"id"?: string,"join_code"?: string,"lat"?: number | null,"lng"?: number | null,"logo_path"?: string | null,"name"?: string,"receipt_prefix"?: string,"settings"?: NonNullable<Json>,"setup_completed_at"?: string | null,"slug"?: string,"timezone"?: string,"updated_at"?: string,"upi_id"?: string | null,"whatsapp_number"?: string | null
                   }
                   Relationships: [
                     
@@ -563,6 +595,12 @@ isOneToOne: false
 "create_library":
 { Args: { "lib_city": string,"lib_name": string,"owner_name": string }; Returns: string
                            },
+"get_join_form":
+{ Args: { "code": string }; Returns: Json
+                           },
+"import_student":
+{ Args: { "input": Json }; Returns: Json
+                           },
 "mark_left":
 { Args: { "deposit_action": string,"note": string,"stu": string }; Returns: undefined
                            },
@@ -580,11 +618,17 @@ isOneToOne: false
 "renew_subscription":
 { Args: { "input": Json }; Returns: Json
                            },
+"reset_join_code":
+{ Args: { "lib": string }; Returns: string
+                           },
 "resume_subscription":
 { Args: { "sub": string }; Returns: Json
                            },
 "save_layout":
 { Args: { "layout": Json,"lib": string }; Returns: undefined
+                           },
+"submit_join_request":
+{ Args: { "code": string,"input": Json }; Returns: undefined
                            },
 "today_summary":
 { Args: { "lib": string,"on_date": string }; Returns: Json
@@ -594,7 +638,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "attendance_method": "qr"|"manual","deposit_status": "held"|"refunded"|"adjusted","expense_category": "rent"|"electricity"|"internet"|"salary"|"maintenance"|"other","gender": "male"|"female"|"other","invoice_status": "due"|"partial"|"paid"|"waived","lead_status": "new"|"contacted"|"trial_booked"|"converted"|"lost","member_role": "owner"|"manager"|"desk","payment_method": "cash"|"upi"|"card"|"bank","student_source": "walk_in"|"referral"|"instagram"|"google"|"whatsapp"|"other","student_status": "active"|"paused"|"left","subscription_status": "upcoming"|"active"|"paused"|"expired"|"cancelled","waitlist_status": "waiting"|"offered"|"converted"|"dropped"
+            "attendance_method": "qr"|"manual","deposit_status": "held"|"refunded"|"adjusted","expense_category": "rent"|"electricity"|"internet"|"salary"|"maintenance"|"other","gender": "male"|"female"|"other","invoice_status": "due"|"partial"|"paid"|"waived","join_request_status": "pending"|"approved"|"rejected","lead_status": "new"|"contacted"|"trial_booked"|"converted"|"lost","member_role": "owner"|"manager"|"desk","payment_method": "cash"|"upi"|"card"|"bank","student_source": "walk_in"|"referral"|"instagram"|"google"|"whatsapp"|"other","student_status": "active"|"paused"|"left","subscription_status": "upcoming"|"active"|"paused"|"expired"|"cancelled","waitlist_status": "waiting"|"offered"|"converted"|"dropped"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -714,7 +758,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "attendance_method": ["qr", "manual"],"deposit_status": ["held", "refunded", "adjusted"],"expense_category": ["rent", "electricity", "internet", "salary", "maintenance", "other"],"gender": ["male", "female", "other"],"invoice_status": ["due", "partial", "paid", "waived"],"lead_status": ["new", "contacted", "trial_booked", "converted", "lost"],"member_role": ["owner", "manager", "desk"],"payment_method": ["cash", "upi", "card", "bank"],"student_source": ["walk_in", "referral", "instagram", "google", "whatsapp", "other"],"student_status": ["active", "paused", "left"],"subscription_status": ["upcoming", "active", "paused", "expired", "cancelled"],"waitlist_status": ["waiting", "offered", "converted", "dropped"]
+            "attendance_method": ["qr", "manual"],"deposit_status": ["held", "refunded", "adjusted"],"expense_category": ["rent", "electricity", "internet", "salary", "maintenance", "other"],"gender": ["male", "female", "other"],"invoice_status": ["due", "partial", "paid", "waived"],"join_request_status": ["pending", "approved", "rejected"],"lead_status": ["new", "contacted", "trial_booked", "converted", "lost"],"member_role": ["owner", "manager", "desk"],"payment_method": ["cash", "upi", "card", "bank"],"student_source": ["walk_in", "referral", "instagram", "google", "whatsapp", "other"],"student_status": ["active", "paused", "left"],"subscription_status": ["upcoming", "active", "paused", "expired", "cancelled"],"waitlist_status": ["waiting", "offered", "converted", "dropped"]
           }
         }
 } as const

@@ -1,4 +1,4 @@
-import { ChevronRight, LogOut, MessageCircle, Settings } from "lucide-react";
+import { ChevronRight, LogOut, MessageCircle, QrCode, Settings } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -21,9 +21,10 @@ const ROLE_KEY = { owner: "roleOwner", manager: "roleManager", desk: "roleDesk" 
 export default async function MorePage() {
   const { viewer, membership } = await requireLibrary();
   const library = { name: membership.libraryName, city: membership.city };
-  const [t, ts, themeCookie] = await Promise.all([
+  const [t, ts, tj, themeCookie] = await Promise.all([
     getTranslations("more"),
     getTranslations("setup"),
+    getTranslations("joinShare"),
     cookies().then((c) => c.get(THEME_COOKIE)?.value),
   ]);
   const help = SUPPORT_WHATSAPP
@@ -53,6 +54,20 @@ export default async function MorePage() {
           />
         </Section>
       ) : null}
+
+      <Link
+        href="/more/join"
+        className="flex min-h-16 items-center gap-3 rounded-[14px] border border-border bg-surface px-4 py-3 transition-colors hover:bg-surface-2"
+      >
+        <span className="grid size-10 place-items-center rounded-full bg-brand-soft text-brand-soft-fg">
+          <QrCode className="size-5" aria-hidden />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-base font-semibold">{tj("linkTitle")}</span>
+          <span className="block text-sm text-text-2">{tj("linkHint")}</span>
+        </span>
+        <ChevronRight className="size-5 text-text-3" aria-hidden />
+      </Link>
 
       {membership.permissions.can_edit_settings ? (
         <Link

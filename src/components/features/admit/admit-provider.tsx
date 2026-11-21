@@ -44,7 +44,7 @@ export function AdmitButton({ variant }: { variant: "fab" | "sidebar" }) {
       type="button"
       onClick={() => openAdmit()}
       className={cn(
-        "flex items-center justify-center gap-2 bg-brand font-semibold text-brand-fg transition-[transform,background-color] duration-150 hover:bg-brand-hover active:scale-[0.97]",
+        "flex items-center justify-center gap-2 bg-brand font-semibold print:hidden text-brand-fg transition-[transform,background-color] duration-150 hover:bg-brand-hover active:scale-[0.97]",
         variant === "fab"
           ? "fixed right-4 bottom-[calc(76px+env(safe-area-inset-bottom))] z-40 h-14 rounded-[18px] px-5 text-base shadow-[var(--shadow-pop)] lg:hidden"
           : "h-12 w-full rounded-[12px] text-base",
