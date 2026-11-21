@@ -1,5 +1,36 @@
 # Progress
 
+## Moving existing students in: QR self-registration (21 Nov 2026)
+
+**Goal:** the owner shouldn't have to type every existing student by hand.
+
+### How it works
+1. **और → स्टूडेंट से जानकारी भरवाएँ** shows a QR poster. Print it for the desk, or send the link on WhatsApp with one tap. Copy link and "make a new link" (old posters stop working) are there too.
+2. **The student scans it on their own phone.** No login, no app. It's a Hindi-first form (with an English switch) asking: name, mobile, boy/girl, which shift, seat number if they know it, **"आख़िरी बार फीस कब दी?"** (when they last paid) if they remember, and their exam. They see "धन्यवाद, आपकी जानकारी भेज दी गई".
+3. **Aaj and Students show "3 नए अनुरोध"** (3 new requests). The inbox flags anything to check: the number is already a student, the seat number doesn't exist or is someone else's, no fee date, the plan has already ended, or two students claim the same seat (the earlier request keeps it).
+4. **One tap: "सब ठीक वाले पक्का करें"** (confirm all that look right) adds every clean request at once. The others open a card where the owner fixes the plan, start date, seat and any fees still pending, then confirms. Requests can also be removed.
+5. **"खुद जोड़ें"** (add myself) uses the same card for students who can't fill the form.
+
+### Money rule
+Fees paid **before** the app are stored as an "opening" amount. They make the plan show as paid (or part-paid, with the pending amount in Fees), but they are **not** payments: they never appear in "आज की कमाई", reports or receipt numbers. Paying the rest later counts both parts.
+
+### Safety
+- Only the library's own staff can read requests. A visitor, or another library, sees nothing.
+- The form never says whether a number is already a student (so nobody can check who studies there).
+- 5 sends per number per day, 500 waiting per library. Sending again replaces the earlier request.
+- Nothing enters the records until staff confirm it.
+
+### Also fixed
+- Deleting a whole library was blocked by the "a library needs an owner" rule. That's also why the sample-data reset had been failing quietly. Fixed, with a test.
+
+### Tests
+| Suite | Result |
+|---|---|
+| Unit | 57 passed (+6: request checks, plan dates, seat claimed twice) |
+| Database | 76 passed (+22: public form, privacy, spam limit, approval, opening amounts, library deletion), local **and** live |
+| Browser | 32 passed (+6: student fills form logged-out → owner confirms; wrong link; add by hand doesn't change earnings) |
+| Type check, lint, production build | clean |
+
 ## Phase 2: Admit, seats, students, setup (21 Nov 2026)
 
 **Goal:** admit a student in under 60 seconds on a phone.
