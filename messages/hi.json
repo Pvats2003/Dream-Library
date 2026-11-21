@@ -403,7 +403,16 @@
     "source_instagram": "Instagram",
     "source_google": "Google",
     "source_whatsapp": "WhatsApp",
-    "source_other": "अन्य"
+    "source_other": "अन्य",
+    "collect": "पैसे लें",
+    "viewReceipt": "रसीद",
+    "reverse": "गलती सुधारें",
+    "reverseTitle": "ये पेमेंट रद्द करें?",
+    "reverseHint": "{amount} की रसीद रद्द हो जाएगी और ये फीस फिर से बाकी दिखेगी। पुराना हिसाब मिटता नहीं, दोनों दर्ज रहते हैं।",
+    "reverseReason": "क्यों रद्द कर रहे हैं?",
+    "reverseConfirm": "हाँ, रद्द करें",
+    "reversed": "पेमेंट रद्द हो गया",
+    "reversedLabel": "रद्द किया: {reason}"
   },
   "setup": {
     "stepOf": "{total} में से {step}",
@@ -633,5 +642,29 @@
     "noUpi": "ये फीस लाइब्रेरी में जमा करें।",
     "notFound": "ये लिंक काम नहीं कर रहा",
     "notFoundBody": "लाइब्रेरी से नया लिंक माँगें।"
+  },
+  "templates": {
+    "title": "WhatsApp संदेश",
+    "linkHint": "याद दिलाने, स्वागत और रसीद के संदेश बदलें",
+    "intro": "ये संदेश WhatsApp पर भेजे जाते हैं। नीचे के बटन दबाकर नाम, रकम जैसी चीज़ें जोड़ें — भेजते समय ये अपने आप भर जाएँगी।",
+    "k_reminder": "फीस याद दिलाना",
+    "k_overdue": "फीस कई दिनों से बाकी",
+    "k_expiring": "प्लान खत्म होने वाला",
+    "k_welcome": "नए स्टूडेंट का स्वागत",
+    "k_receipt": "रसीद भेजना",
+    "insert": "जोड़ें:",
+    "v_name": "नाम",
+    "v_amount": "रकम",
+    "v_due_date": "फीस की तारीख",
+    "v_end_date": "प्लान खत्म तारीख",
+    "v_seat": "सीट",
+    "v_upi_link": "पैसे भेजने का लिंक",
+    "v_library": "लाइब्रेरी का नाम",
+    "v_receipt_link": "रसीद का लिंक",
+    "preview": "स्टूडेंट को ऐसा दिखेगा",
+    "save": "सेव करें",
+    "saved": "संदेश सेव हो गया",
+    "reset": "पहले वाला संदेश",
+    "failed": "सेव नहीं हुआ"
   }
 }

@@ -110,3 +110,33 @@ export async function quickRenew(studentId: string, clientOpId: string): Promise
   refresh(v.data.s);
   return { ok: true, invoiceId: r.invoice_id, amountDuePaise: r.amount_due_paise, startDate: r.start_date, endDate: r.end_date, seatLost: Boolean(r.seat_lost) };
 }
+
+const KEYS = ["welcome", "reminder", "expiring", "receipt", "overdue"] as const;
+
+/** Owner edits a WhatsApp message text. */
+export async function saveTemplate(key: string, locale: string, body: string): Promise<{ ok: boolean }> {
+  const v = z.object({ key: z.enum(KEYS), locale: z.enum(["hi", "en"]), body: z.string().trim().min(1).max(2000) }).safeParse({ key, locale, body });
+  if (!v.success) return { ok: false };
+  const { membership } = await requireLibrary();
+  if (!membership.permissions.can_edit_settings) return { ok: false };
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("message_templates")
+    .upsert({ library_id: membership.libraryId, key: v.data.key, locale: v.data.locale, body: v.data.body }, { onConflict: "library_id,key,locale" });
+  if (error) return { ok: false };
+  revalidatePath("/more/templates");
+  revalidatePath("/fees");
+  return { ok: true };
+}
+
+export async function reversePayment(paymentId: string, studentId: string, reason: string): Promise<{ ok: true } | { ok: false; error: "noPermission" | "reason" | "failed" }> {
+  const v = z.object({ p: z.uuid(), s: z.uuid(), reason: z.string().trim().min(1).max(200) }).safeParse({ p: paymentId, s: studentId, reason });
+  if (!v.success) return { ok: false, error: "reason" };
+  const { membership } = await requireLibrary();
+  if (!membership.permissions.can_delete) return { ok: false, error: "noPermission" };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("reverse_payment", { payment: v.data.p, reason: v.data.reason });
+  if (error) return { ok: false, error: error.code === "42501" ? "noPermission" : "failed" };
+  refresh(v.data.s);
+  return { ok: true };
+}

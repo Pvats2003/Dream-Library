@@ -39,7 +39,16 @@ export type StudentProfile = {
     amountDuePaise: number;
     amountPaidPaise: number;
     status: "due" | "partial" | "paid" | "waived";
-    payments: { id: string; amountPaise: number; method: string; receivedAt: string; receiptNumber: string | null; receiptToken: string }[];
+    payments: {
+      id: string;
+      amountPaise: number;
+      method: string;
+      receivedAt: string;
+      receiptNumber: string | null;
+      receiptToken: string;
+      reversesId: string | null;
+      reversalReason: string | null;
+    }[];
   }[];
   deposits: { amountPaise: number; status: "held" | "refunded" | "adjusted"; receivedAt: string }[];
   attendance: { checkInAt: string; checkOutAt: string | null }[];
@@ -63,7 +72,7 @@ export async function getStudentProfile(libraryId: string, id: string, canSeeHis
       .order("start_date", { ascending: false }),
     supabase
       .from("invoices")
-      .select("id, due_date, period_start, period_end, amount_due_paise, amount_paid_paise, status, payments(id, amount_paise, method, received_at, receipt_number, receipt_token)")
+      .select("id, due_date, period_start, period_end, amount_due_paise, amount_paid_paise, status, payments(id, amount_paise, method, received_at, receipt_number, receipt_token, reverses_payment_id, reversal_reason)")
       .eq("library_id", libraryId)
       .eq("student_id", id)
       .order("due_date", { ascending: false }),
@@ -144,6 +153,8 @@ export async function getStudentProfile(libraryId: string, id: string, canSeeHis
           receivedAt: p.received_at,
           receiptNumber: p.receipt_number,
           receiptToken: p.receipt_token,
+          reversesId: p.reverses_payment_id,
+          reversalReason: p.reversal_reason,
         }))
         .sort((a, b) => b.receivedAt.localeCompare(a.receivedAt)),
     })),

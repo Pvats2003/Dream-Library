@@ -403,7 +403,16 @@
     "source_instagram": "Instagram",
     "source_google": "Google",
     "source_whatsapp": "WhatsApp",
-    "source_other": "Other"
+    "source_other": "Other",
+    "collect": "Collect",
+    "viewReceipt": "Receipt",
+    "reverse": "Fix a mistake",
+    "reverseTitle": "Cancel this payment?",
+    "reverseHint": "The {amount} receipt will be cancelled and this fee will show as pending again. Nothing is erased; both entries are kept.",
+    "reverseReason": "Why are you cancelling it?",
+    "reverseConfirm": "Yes, cancel it",
+    "reversed": "Payment cancelled",
+    "reversedLabel": "Cancelled: {reason}"
   },
   "setup": {
     "stepOf": "Step {step} of {total}",
@@ -633,5 +642,29 @@
     "noUpi": "Please pay these fees at the library.",
     "notFound": "This link isn't working",
     "notFoundBody": "Ask the library for a new link."
+  },
+  "templates": {
+    "title": "WhatsApp messages",
+    "linkHint": "Change the reminder, welcome and receipt messages",
+    "intro": "These messages are sent on WhatsApp. Tap the buttons below to add things like the name or amount — they're filled in automatically when sending.",
+    "k_reminder": "Fee reminder",
+    "k_overdue": "Fees pending for many days",
+    "k_expiring": "Plan ending soon",
+    "k_welcome": "Welcome a new student",
+    "k_receipt": "Sending a receipt",
+    "insert": "Add:",
+    "v_name": "Name",
+    "v_amount": "Amount",
+    "v_due_date": "Fee date",
+    "v_end_date": "Plan end date",
+    "v_seat": "Seat",
+    "v_upi_link": "Payment link",
+    "v_library": "Library name",
+    "v_receipt_link": "Receipt link",
+    "preview": "The student will see",
+    "save": "Save",
+    "saved": "Message saved",
+    "reset": "Original message",
+    "failed": "Couldn't save"
   }
 }
