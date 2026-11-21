@@ -47,7 +47,7 @@ test("an existing student's number offers renewal instead of a duplicate", async
   await login(page, "9999900001");
   await page.goto("/students");
   // Take a real, active student's number from the list.
-  const phoneText = await page.locator("main ul li").first().locator("p.tabular").innerText();
+  const phoneText = await page.locator("main ul li").first().locator("p.tabular").textContent() ?? "";
   const digits = phoneText.replace(/\D/g, "").slice(-10);
 
   await page.getByRole("button", { name: "नया स्टूडेंट" }).filter({ visible: true }).click();

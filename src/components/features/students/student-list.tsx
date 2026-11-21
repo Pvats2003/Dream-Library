@@ -134,9 +134,9 @@ export function StudentList({
                     </p>
                     <p className="truncate text-sm text-text-3 tabular">
                       {s.endDate
-                        ? `${ended ? t("endedOn", { date: formatDay(s.endDate, locale) }) : t("endsOn", { date: formatDay(s.endDate, locale) })} · `
+                        ? `${ended ? t("endedOn", { date: formatDay(s.endDate, locale) }) : t("endsOn", { date: formatDay(s.endDate, locale) })}`
                         : ""}
-                      {formatMobile(s.phone)}
+                      <span className="hidden sm:inline">{s.endDate ? " · " : ""}{formatMobile(s.phone)}</span>
                     </p>
                   </div>
                   {s.status === "left" ? (

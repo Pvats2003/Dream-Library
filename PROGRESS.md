@@ -170,3 +170,25 @@ The automated admit takes about 1.7 s, so the only real limit on the 60-second g
 - Two review rounds (10 + 10 fixes): e.g. focus ring no longer changes shape, spinner replaces the icon while loading, solid-disc toast icons, empty shift ring shows no dot, clearer seat/status labels, type samples wrap instead of cutting off on phones.
 - Screenshots: `docs/screenshots/design-lab-{390,1440}-{light,dark}-{hi,en}.png`.
 - Checks: typecheck, lint, 131 unit tests, 42 e2e tests pass; no console errors or sideways scroll at 390/1440.
+
+## Design Steps 2–4 — signature screens, delight, layouts (2026-11-21)
+
+**Seat map:** desk-and-chair tiles (free = dashed outline, taken = solid with initials, ending soon = stripes, fees pending = red edge + badge, closed = cross-hatch); zone cards with an occupancy ring; shift switcher with a sliding spring indicator; tiles settle in with a spring on shift change; a seat changed by someone else pulses once; bigger/smaller seat size with pan inside each zone; soft lamp glow at night; seat sheet shows state as icon + word. The live connection loads after the map (Seats JS 258 → ~180 KB).
+
+**Today:** "शुभ संध्या, Rajesh जी" in the serif face with the Hindi date; three big counting-up numbers (collection, fees pending, free seats); "ध्यान दें" list (late fees, plans ending this week) with one Remind button each; a self-drawing check when all of the week's fees are in; seats-free ring per shift.
+
+**Receipt:** library colour band with monogram, serif title, amount in figures and Hindi words, paid/owed badge, seat + shift (new `get_receipt.shift_name`, migration 0007, applied locally and on hosted), validity, method, "LibraryOS से बनी रसीद" footer. Shared photo checked with क्षि, श्री, स्त — renders correctly (html-to-image).
+
+**Admit:** big 56px keypads on phones for mobile number and ₹; sheet opens with a real spring (stiffness 400, damping 30, as CSS `linear()`); Enter moves on from any step on desktop; "सीट मिल गई!" with the seat tile dropping into place.
+
+**Delight:** hand-drawn sleepy owl / book stack / empty desk (3 KB together) with one sentence and one action; skeletons shaped like the final screens; optional buzz + soft tick on payment (More → off by default); all motion off with reduce-motion.
+
+**Layouts:** phones keep bottom tabs + floating "+"; desktop Students = list left, profile right; desktop Fees = inbox left, details panel right; More capped to a readable width; checked at 768px.
+
+**Review rounds** (2 × 10 fixes): 48px seat tiles by default, 48px row buttons, no cut-off text in lists, stronger selected state in dark switches, label sizes ≥15px (pills, tabs), seat map no longer pushes the page sideways, initials balanced with seat numbers, etc.
+
+**Owner walkthrough fixes:** "लाइव" → "अपने-आप ताज़ा", "टिप" → "सुझाव", "PDF / प्रिंट" → "प्रिंट / सेव करें", "UPI रेफ़रेंस" → "UPI वाला नंबर", "लॉग आउट" → "बाहर निकलें (लॉग आउट)", ⋮ → "बाद में", seat-size buttons get the word "साइज़", seat hint explains the initials.
+
+**Checks:** typecheck, lint, 131 unit tests (incl. contrast), 42 e2e tests pass. Lighthouse mobile (production build): Welcome 99/100/100, Today 97/100/100, Seats 95/100/100, Students 99/100/100, Fees 81/100/96 (its "largest paint" is the one-time swipe tip; the list itself paints at ~1 s). Initial JS: Today ~149–158 KB gzipped (unchanged by the redesign; ~150 budget), Welcome 164 KB and Fees 200 KB were already above budget before this work.
+
+**Screenshots:** `docs/screenshots/` — every screen at 390 and 1440, light and dark, Hindi and English, plus 768 for the main tabs, the admit steps and the shared receipt photo.

@@ -16,7 +16,8 @@ export function toast(message: string, opts: { tone?: Toast["tone"]; action?: To
   const t: Toast = { id: nextId++, message, tone: opts.tone ?? "success", action: opts.action };
   toasts = [...toasts.slice(-2), t];
   emit();
-  if (t.tone === "success") navigator.vibrate?.(15);
+  // A small buzz only in answer to something the person just did (not tips on page open).
+  if (t.tone === "success" && navigator.userActivation?.hasBeenActive) navigator.vibrate?.(15);
   return t.id;
 }
 

@@ -100,7 +100,7 @@
     "seatLabel": "Seat {label}",
     "seatTakenBy": "Seat {label}, {name}",
     "seatFreeA11y": "Seat {label}, free",
-    "tapHint": "Tap a seat to see who sits there",
+    "tapHint": "Taken seats show the student's initials. Tap a seat to see more.",
     "heatmap": "How full in 30 days",
     "heatmapOn": "Showing how full",
     "heatmapHint": "The % on each seat shows how full it was over the last 30 days. Low numbers mean the seat sits empty.",
@@ -121,7 +121,7 @@
     "undo": "Undo",
     "errTaken": "That seat isn't free. Pick another.",
     "errFailed": "Couldn't do that. Please try again.",
-    "live": "Live",
+    "live": "Updates by itself",
     "shiftWord": "{shift} shift",
     "shiftPicker": "Pick a shift",
     "zoom": "Seat size",
@@ -130,7 +130,8 @@
     "girlsOnly": "Girls",
     "ofTotal": "{total} in all",
     "noSeatsBody": "Draw your hall once and every seat shows up here.",
-    "noSeatsAction": "Set up seats"
+    "noSeatsAction": "Set up seats",
+    "sizeWord": "Size"
   },
   "students": {
     "title": "Students",
@@ -218,7 +219,8 @@
     "coversTill": "Covers till",
     "alreadyPaid": "Already paid",
     "later": "Remind later",
-    "profile": "Profile"
+    "profile": "Profile",
+    "laterShort": "Later"
   },
   "more": {
     "title": "More",
@@ -663,7 +665,7 @@
     "reversed": "This receipt has been cancelled",
     "thanks": "Thank you! All the best with your studies.",
     "sharePhoto": "Share as photo",
-    "print": "PDF / Print",
+    "print": "Print / save",
     "notFound": "Receipt not found",
     "notFoundBody": "Check that the whole link was copied.",
     "generated": "Receipt made with LibraryOS",

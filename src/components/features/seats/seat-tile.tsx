@@ -60,8 +60,8 @@ export function SeatTile({
       <span aria-hidden className="absolute top-[3px] right-[18%] left-[18%] h-[3px] rounded-full bg-current opacity-30" />
       {showInitials ? (
         <>
-          <span className="text-[clamp(13px,38cqw,22px)] leading-none font-bold">{initials}</span>
-          <span className="mt-[2px] text-[clamp(10px,22cqw,13px)] leading-none font-semibold opacity-80">{label}</span>
+          <span className="text-[clamp(12px,30cqw,19px)] leading-none font-bold">{initials}</span>
+          <span className="mt-[3px] text-[clamp(11px,26cqw,15px)] leading-none font-bold opacity-90">{label}</span>
         </>
       ) : (
         <span className={cn("text-[clamp(12px,30cqw,17px)] leading-none font-bold", state === "inactive" && "line-through")}>{label}</span>

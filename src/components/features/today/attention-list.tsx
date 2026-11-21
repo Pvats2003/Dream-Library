@@ -83,13 +83,13 @@ export function AttentionList({
               <Avatar name={r.name} className="size-11 text-[15px]" />
               <span className="min-w-0">
                 <span className="block truncate text-base font-semibold">{r.name}</span>
-                <span className={r.kind === "overdue" ? "flex items-center gap-1 text-[15px] text-danger" : "flex items-center gap-1 text-[15px] text-warning"}>
-                  {r.kind === "overdue" ? <AlertCircle className="size-4 shrink-0" aria-hidden /> : <CalendarClock className="size-4 shrink-0" aria-hidden />}
-                  <span className="truncate tabular">{r.line}</span>
+                <span className={r.kind === "overdue" ? "flex items-start gap-1 text-[15px] leading-snug text-danger" : "flex items-start gap-1 text-[15px] leading-snug text-warning"}>
+                  {r.kind === "overdue" ? <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden /> : <CalendarClock className="mt-0.5 size-4 shrink-0" aria-hidden />}
+                  <span className="tabular">{r.line}</span>
                 </span>
               </span>
             </Link>
-            <Button variant="secondary" size="sm" className="h-11 shrink-0" onClick={r.send}>
+            <Button variant="secondary" size="sm" className="h-12 shrink-0 text-[15px]" onClick={r.send}>
               <MessageCircle aria-hidden />
               {t("remind")}
             </Button>

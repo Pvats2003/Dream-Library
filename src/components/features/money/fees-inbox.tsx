@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, BellRing, CircleCheck, Clock, EllipsisVertical, IndianRupee, Loader2, MessageCircle, RefreshCw, X } from "lucide-react";
+import { AlertCircle, BellRing, CircleCheck, Clock, IndianRupee, Loader2, MessageCircle, RefreshCw, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -121,7 +121,7 @@ export function FeesInbox({
           <Button
             variant={selecting ? "soft" : "secondary"}
             size="sm"
-            className="h-11"
+            className="h-12"
             onClick={() => {
               setSelecting(!selecting);
               setSelected([]);
@@ -216,18 +216,18 @@ export function FeesInbox({
                               <Button
                                 size="sm"
                                 variant="success"
-                                className="h-10 flex-1"
+                                className="h-12 flex-1 text-[15px]"
                                 onClick={() => setPay({ invoiceId: inv.id, studentId: inv.studentId, studentName: inv.studentName, phone: inv.phone, owedPaise: inv.owed })}
                               >
                                 <IndianRupee aria-hidden />
                                 {t("recordPaid")}
                               </Button>
-                              <Button size="sm" variant="secondary" className="h-10 flex-1" onClick={() => remind(inv)}>
+                              <Button size="sm" variant="secondary" className="h-12 flex-1 text-[15px]" onClick={() => remind(inv)}>
                                 <MessageCircle aria-hidden />
                                 {t("remind")}
                               </Button>
-                              <Button size="sm" variant="ghost" className="h-10 w-10 px-0" aria-label={t("moreActions")} onClick={() => setSnoozeFor(inv)}>
-                                <EllipsisVertical aria-hidden />
+                              <Button size="sm" variant="ghost" className="h-12 px-3 text-[15px]" aria-label={t("moreActions")} onClick={() => setSnoozeFor(inv)}>
+                                {t("laterShort")}
                               </Button>
                             </div>
                           ) : null}
@@ -261,11 +261,11 @@ export function FeesInbox({
                     <p className="text-sm font-medium text-info">{t("endsIn", { days: Math.max(0, daysBetween(today, p.endDate)) })}</p>
                     <p className="truncate text-sm text-text-2">{[p.planName, p.seatLabel, formatDay(p.endDate, locale)].filter(Boolean).join(" · ")}</p>
                     <div className="mt-2.5 flex gap-2 sm:max-w-md">
-                      <Button size="sm" variant="soft" className="h-10 flex-1" disabled={busy} onClick={() => renew(p)}>
+                      <Button size="sm" variant="soft" className="h-12 flex-1 text-[15px]" disabled={busy} onClick={() => renew(p)}>
                         {busy ? <Loader2 className="animate-spin" aria-hidden /> : <RefreshCw aria-hidden />}
                         {t("renew")}
                       </Button>
-                      <Button size="sm" variant="secondary" className="h-10 flex-1" onClick={() => remindEnding(p)}>
+                      <Button size="sm" variant="secondary" className="h-12 flex-1 text-[15px]" onClick={() => remindEnding(p)}>
                         <MessageCircle aria-hidden />
                         {t("remind")}
                       </Button>

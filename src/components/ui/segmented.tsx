@@ -61,7 +61,7 @@ export function Segmented<T extends string>({
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute top-1 bottom-1 left-0 rounded-[10px] border border-border bg-surface shadow-sm transition-[transform,width,opacity] duration-[420ms] ease-[cubic-bezier(0.34,1.36,0.64,1)] motion-reduce:transition-none"
+        className="pointer-events-none absolute top-1 bottom-1 left-0 rounded-[10px] border border-border bg-surface shadow-sm dark:border-border-heavy dark:bg-surface-press transition-[transform,width,opacity] duration-[420ms] ease-[cubic-bezier(0.34,1.36,0.64,1)] motion-reduce:transition-none"
         style={{ transform: `translateX(${pill?.x ?? 0}px)`, width: pill?.w ?? 0, opacity: pill ? 1 : 0 }}
       />
       {options.map((o) => {

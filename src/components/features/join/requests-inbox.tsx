@@ -68,7 +68,7 @@ export function RequestsInbox({ requests, data, existingPhones }: { requests: Jo
             <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
             <p className="mt-1 text-base text-text-2">{t("subtitle", { count: requests.length })}</p>
           </div>
-          <Link href="/more/join" className={buttonVariants({ variant: "secondary", size: "sm", className: "h-11" })}>
+          <Link href="/more/join" className={buttonVariants({ variant: "secondary", size: "sm", className: "h-12" })}>
             <QrCode aria-hidden />
             {t("openQr")}
           </Link>
@@ -118,13 +118,13 @@ export function RequestsInbox({ requests, data, existingPhones }: { requests: Jo
               </div>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {p.problems.length === 0 ? (
-                  <span className="inline-flex h-7 items-center gap-1 rounded-full bg-success-soft px-2.5 text-xs font-semibold text-success">
+                  <span className="inline-flex h-8 items-center gap-1 rounded-full bg-success-soft px-2.5 text-sm font-semibold text-success">
                     <CircleCheck className="size-3.5" aria-hidden />
                     {t("allClear")}
                   </span>
                 ) : (
                   p.problems.map((x) => (
-                    <span key={x} className="inline-flex h-7 items-center gap-1 rounded-full bg-warning-soft px-2.5 text-xs font-semibold text-warning">
+                    <span key={x} className="inline-flex h-8 items-center gap-1 rounded-full bg-warning-soft px-2.5 text-sm font-semibold text-warning">
                       <AlertCircle className="size-3.5" aria-hidden />
                       {t(`p_${x}`)}
                     </span>

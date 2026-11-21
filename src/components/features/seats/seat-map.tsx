@@ -18,7 +18,6 @@ import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { addDays, formatDay, formatMinutesShort, type AppLocale } from "@/lib/dates";
 import { phoneDigits } from "@/lib/phone";
-import { getBrowserClient } from "@/lib/supabase/client";
 
 export { TILE };
 
@@ -69,11 +68,14 @@ function useLiveSeats(libraryId: string) {
   const router = useRouter();
   const [live, setLive] = useState(false);
   useEffect(() => {
-    const supabase = getBrowserClient();
     let timer: ReturnType<typeof setTimeout> | undefined;
-    let channel: ReturnType<typeof supabase.channel> | undefined;
+    let channel: { unsubscribe: () => unknown } | undefined;
     let cancelled = false;
     (async () => {
+      // Loaded after the map is on screen: the live connection is heavy
+      // and the seats don't need it to appear.
+      const { getBrowserClient } = await import("@/lib/supabase/client");
+      const supabase = getBrowserClient();
       // Realtime checks the same security rules as everything else, so it
       // must connect as the logged-in person, not anonymously.
       const { data } = await supabase.auth.getSession();
@@ -91,7 +93,7 @@ function useLiveSeats(libraryId: string) {
     return () => {
       cancelled = true;
       clearTimeout(timer);
-      if (channel) supabase.removeChannel(channel);
+      void channel?.unsubscribe();
     };
   }, [libraryId, router]);
   return live;
@@ -116,7 +118,8 @@ export function SeatMap({
   const live = useLiveSeats(libraryId);
   const [shiftId, setShiftId] = useState<string>(ALL);
   const [heat, setHeat] = useState(false);
-  const [zoom, setZoom] = useState(0);
+  // Start big enough to tap (48px+); "−" shows the whole hall at once.
+  const [zoom, setZoom] = useState(1);
   const [openSeat, setOpenSeat] = useState<string | null>(null);
   const [moving, setMoving] = useState<{ occupant: MapOccupant; fromSeat: MapSeat } | null>(null);
   const [flash, setFlash] = useState<Set<string>>(() => new Set());
@@ -207,7 +210,7 @@ export function SeatMap({
           aria-pressed={heat}
           onClick={() => setHeat(!heat)}
           disabled={Boolean(moving)}
-          className="h-11"
+          className="h-12"
         >
           <Flame aria-hidden />
           {t("heatmap")}
@@ -219,6 +222,9 @@ export function SeatMap({
               {t("live")}
             </span>
           ) : null}
+          <span className="text-[15px] text-text-2" aria-hidden>
+            {t("sizeWord")}
+          </span>
           <div className="flex items-center rounded-[12px] border border-border-strong bg-surface" role="group" aria-label={t("zoom")}>
             <button
               type="button"
@@ -248,14 +254,14 @@ export function SeatMap({
         <div className="sticky top-2 z-30 mt-3 flex items-center gap-3 rounded-[14px] bg-text px-4 py-3 text-bg shadow-[var(--shadow-pop)]" role="status">
           <ArrowRightLeft className="size-5 shrink-0" aria-hidden />
           <p className="flex-1 text-base font-medium">{t("moveBanner", { name: moving.occupant.studentName })}</p>
-          <button type="button" onClick={() => setMoving(null)} className="flex h-11 items-center gap-1 rounded-[10px] px-2 font-semibold">
+          <button type="button" onClick={() => setMoving(null)} className="flex h-12 items-center gap-1 rounded-[10px] px-2 font-semibold">
             <X className="size-5" aria-hidden />
             {t("cancelMove")}
           </button>
         </div>
       ) : null}
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-2">
+      <div className="mt-4 grid min-w-0 grid-cols-1 gap-4 xl:grid-cols-2">
         {computed.map(({ zone, seats, free, total }) => {
           const xs = seats.map((s) => s.seat.x);
           const cols = Math.max(...xs) + 1;
@@ -265,7 +271,7 @@ export function SeatMap({
           return (
             <section
               key={zone.id ?? "none"}
-              className="-mx-2 rounded-[20px] border border-border bg-surface p-3 shadow-sm sm:mx-0 sm:p-5"
+              className="-mx-2 min-w-0 rounded-[20px] border border-border bg-surface p-3 shadow-sm sm:mx-0 sm:p-5"
               aria-label={zone.name || t("title")}
             >
               <header className="mb-4 flex items-center gap-3 px-1">

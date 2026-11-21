@@ -51,6 +51,6 @@ test("desk staff never see rupee totals on Today", async ({ page }) => {
 test("logging out returns to welcome", async ({ page }) => {
   await login(page, "9999900002");
   await page.goto("/more");
-  await page.getByRole("button", { name: "लॉग आउट" }).click();
+  await page.getByRole("button", { name: /लॉग आउट/ }).click();
   await expect(page).toHaveURL(/\/welcome$/);
 });

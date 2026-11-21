@@ -289,7 +289,6 @@ export function AdmitFlow({ open, onOpenChange, prefill }: { open: boolean; onOp
       setResult(res);
       if (paying > 0) paymentFeedback();
       setStep("done");
-      navigator.vibrate?.([20, 40, 20]);
       router.refresh();
     });
   }

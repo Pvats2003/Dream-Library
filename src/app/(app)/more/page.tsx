@@ -33,7 +33,7 @@ export default async function MorePage() {
     : null;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex max-w-2xl flex-col gap-6">
       <PageHeader title={t("title")} />
 
       <Card className="-mt-2 flex items-center gap-4 p-4">
