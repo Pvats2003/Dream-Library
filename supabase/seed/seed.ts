@@ -101,7 +101,7 @@ async function main() {
     // ---------------------------------------------------------------- library
     const lib = await one(
       `insert into public.libraries (name, slug, address, city, upi_id, whatsapp_number, brand_color, receipt_prefix, settings, setup_completed_at)
-       values ('Dream Library', 'dream-library', 'Near Kasim Bazar, Munger', 'Munger, Bihar', 'library@upi', '+919999900001', '#3B3FB6', 'DL',
+       values ('Dream Library', 'dream-library', 'Near Kasim Bazar', 'Munger, Bihar', 'library@upi', '+919999900001', '#3B3FB6', 'DL',
                $1, now()) returning id`,
       [JSON.stringify({ deposit_paise: rupees(500), late_fee_per_day_paise: 0, reminder_days: [7, 3, 1], open_min: 360, close_min: 1380 })],
     );
@@ -422,6 +422,9 @@ async function main() {
       [other, oStudent, oSub, rupees(900), today]);
     await q(`insert into public.payments (library_id, invoice_id, student_id, amount_paise, method, receipt_number) values ($1, $2, $3, $4, 'cash', 'TL-1')`,
       [other, oInv, oStudent, rupees(900)]);
+
+    // What the nightly job would have done: next month's fees for plans ending soon.
+    await q(`select private.nightly($1)`, [lib]);
 
     // Start both audit trails clean.
     await q(`delete from public.activity_log where library_id in ($1, $2)`, [lib, other]);

@@ -117,14 +117,14 @@ isOneToOne: false
                   ]
                 },"invoices": {
                   Row: {
-                    "amount_due_paise": number,"amount_paid_paise": number,"created_at": string,"created_by": string | null,"due_date": string,"id": string,"library_id": string,"note": string | null,"opening_paid_paise": number,"period_end": string | null,"period_start": string | null,"snoozed_until": string | null,"status": Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id": string | null,"updated_at": string,"waived_reason": string | null
+                    "amount_due_paise": number,"amount_paid_paise": number,"created_at": string,"created_by": string | null,"due_date": string,"id": string,"library_id": string,"note": string | null,"opening_paid_paise": number,"pay_token": string,"period_end": string | null,"period_start": string | null,"snoozed_until": string | null,"status": Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id": string | null,"updated_at": string,"waived_reason": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "amount_due_paise": number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date": string,"id"?: string,"library_id": string,"note"?: string | null,"opening_paid_paise"?: number,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
+                    "amount_due_paise": number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date": string,"id"?: string,"library_id": string,"note"?: string | null,"opening_paid_paise"?: number,"pay_token"?: string,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id": string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
                   }
                   Update: {
-                    "amount_due_paise"?: number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date"?: string,"id"?: string,"library_id"?: string,"note"?: string | null,"opening_paid_paise"?: number,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id"?: string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
+                    "amount_due_paise"?: number,"amount_paid_paise"?: number,"created_at"?: string,"created_by"?: string | null,"due_date"?: string,"id"?: string,"library_id"?: string,"note"?: string | null,"opening_paid_paise"?: number,"pay_token"?: string,"period_end"?: string | null,"period_start"?: string | null,"snoozed_until"?: string | null,"status"?: Database["public"]['Enums']["invoice_status"],"student_id"?: string,"subscription_id"?: string | null,"updated_at"?: string,"waived_reason"?: string | null
                   }
                   Relationships: [
                     {
@@ -598,6 +598,12 @@ isOneToOne: false
 "get_join_form":
 { Args: { "code": string }; Returns: Json
                            },
+"get_pay_info":
+{ Args: { "token": string }; Returns: Json
+                           },
+"get_receipt":
+{ Args: { "token": string }; Returns: Json
+                           },
 "import_student":
 { Args: { "input": Json }; Returns: Json
                            },
@@ -615,6 +621,12 @@ isOneToOne: false
 "pause_subscription":
 { Args: { "days": number,"reason": string,"sub": string }; Returns: Json
                            },
+"quick_renew":
+{ Args: { "op": string,"stu": string }; Returns: Json
+                           },
+"record_payment":
+{ Args: { "input": Json }; Returns: Json
+                           },
 "renew_subscription":
 { Args: { "input": Json }; Returns: Json
                            },
@@ -623,6 +635,9 @@ isOneToOne: false
                            },
 "resume_subscription":
 { Args: { "sub": string }; Returns: Json
+                           },
+"reverse_payment":
+{ Args: { "payment": string,"reason": string }; Returns: Json
                            },
 "save_layout":
 { Args: { "layout": Json,"lib": string }; Returns: undefined

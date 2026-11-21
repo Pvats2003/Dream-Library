@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PATHS = ["/welcome", "/login", "/r/", "/offline", "/join/"];
+const PUBLIC_PATHS = ["/welcome", "/login", "/r/", "/p/", "/offline", "/join/"];
 
 /**
  * Runs before every page: refreshes the login session cookie and sends
